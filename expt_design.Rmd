@@ -1,0 +1,349 @@
+---
+title: "Good experimental design"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(mosaic)
+library(car)
+library(tidyr)
+library(magrittr)
+plant_growth <- read.csv("www/plant_growth.csv")
+lolium <- read.csv("www/grass_growth.csv")
+plasma <- read.csv("www/plasma.csv")
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Experimental design
+### Introduction
+You will often collect data where you have more than one explanatory variable,
+and there are two particular areas where this might arise:
+
+* Designed experiments
+* Surveys or 'natural' experiments
+
+**Designed experiments** are typically laboratory studies where you have
+considerable control over the structure of the study, the number of replicates,
+the different treatment(s) used etc. Designed experiments can also be plot-
+based agricultural experiments, or animal behaviour experiments.
+
+**Natural experiments** may arise where you want to study species distributions,
+ecological characteristics or wildlife patterns in as natural and un-modified
+situation as possible. This of course results in you having less ability to
+decide what variables to include, because there may be numerous factors in the
+environment that are affecting the species you are studying.
+
+## The value of randomisation
+The simplest type of experimental design includes some sort of randomisation, and
+can be used in both laboratory- and field-experiments. Randomisation is useful for
+both 'designed' and 'natural' experiments. The need for multiple replicates may
+seem fairly obvious to you, but think about one of the world's oldest agricultural
+experiments, the Palace Leas Experiment at Cockle Park, which many of you will have
+visited:
+
+![](www/palace_leas_photo.png)
+
+Thos of you who have visited the site will know that it slopes gently down a
+hill away from the farm lane, down towards a stream, with a series of 14 
+roughly rectangular shaped plots receiving different treatments:
+
+![](www/palace_leas_plot_layout.png)
+
+Some treatments are replicated (for different years in the rotation cycle
+for treatments) but not all of them are replicated. In fact, standard theories on
+good practice for experimental design had not been developed when the Palace Leas
+experiment was started. Since the start of the experiment, changes to sampling
+methods have eased some problems, by dividing each long rectangle into 4 sub-units
+for sampling, but there remain some problems, and advanced statistical methods
+are sometimes needed.
+
+
+
+```{r palace_leas, echo=FALSE}
+question("What do you think are some of the challenges that arise from the original
+         design? (select ALL that apply)",
+  answer("There may be an effect from being near the road", correct = TRUE),
+  answer("There is no replication"),
+  answer("Plots near the stream may be wetter", correct = TRUE),
+  answer("There is the risk of manure or slurry run-off from the road", correct = TRUE),
+  answer("Multiple samples cannot be taken within a plot"),
+  answer("Samples within a plot might not be independent", correct =TRUE)
+)
+```
+
+## Ways to randomise your treatments
+### Fully randomised design
+There are several methods of creating multiple replicates of your experimental 
+units and randomising the allocation of treatments to them. To give you some
+examples:
+
+1. You might want to investigate the effect of a new antibiotic on bacterial growth.
+
+![](www/bacteria_on_petri.jpeg)
+     
+   + Your **experimental units** could be Petri-dishes on which you grow bacteria.
+   + Your **response variable** is bacterial growth
+   + Your **explanatory variable** has is a categorical 'factor': no antibiotic, your new antibiotic
+
+2. You are interested in the effects of _Rhinanthus minor_ on species diversity
+in grasslands. _Rhinanthus_ is a parasite of grasses, and therefore reduces their
+vigour. This allows other species of wildflower to colonise the grassland.
+![](www/rhinanthus_minor.jpeg)
+     + Your **experimental units** could be different plots in a meadow, each 10 x 10 m
+     + Your **response variable** is the overall diversity of wildflowers
+     + Your **explanatory variable** is a factor with two categories: a control, and plots with
+_Rhinanthus_ seed growing
+
+You can probably think of other studies where you have explanatory variables with
+3, 4 or more categorical levels in them.
+
+You decide to create a simple fully randomised design experiment, with 5 replicates
+for each of your two treatments. So for the antibiotic experiment, you have 5 Petri
+dishes without antibiotic (control), and 5 with your new antibiotic, and you put
+these onto a plastic tray in the incubator.  For the _Rhinanthus_ experiment you
+have 5 plots in your field without any _Rhinanthus_ seed added (control), and 5
+with the seed. You toss a coin to allocate treatments to Petri dishes or plots,
+and end up with the following design.
+
+![](www/fully_randomised.png)
+
+```{r fully_randomised, echo=FALSE}
+question("What do you think is the problem with this design; A is your control
+         (no antibiotic, or no Rhinanthus) and B treatment (antibiotic or 
+         Rhinanthus)",
+  answer("There are not enough replicates", message = "Although replication is
+         low, it might be sufficient, especially if you have done pilot studies"),
+  answer("There are only two treatment levels in the explanatory variable. You 
+         need at least three, e.g. different concentrations of antibiotic, or
+         different seed sowing rates", message = "Only 2 levels in your explanatory
+         variable is sufficient"),
+  answer("Most of the control Petri-dishes or plots are at one end of the tray
+         or field respectively", correct = TRUE, message = "Good. This may bias
+         your results"),
+  allow_retry = TRUE
+  )
+```
+
+Think back to the Palace Leas experiment, which was on a slope. Even if it had
+originally been created as a fully randomised experiment, it would not be ideal
+if most of the plots for one of the fertiliser treatments plots had ended up,
+purely by chance, by the road or by the stream. Likewise, temperatures in an
+incubator are less stable near the door than at the back of an incubator. If most
+of your Petri-dishes for the antibiotic were, purely by chance, near the door
+then that might bias your results.
+
+Of course you could eventually get round this problem by greatly increasing the
+number of replicates. But that would be expensive and time-consuming. Instead
+you can slightly change how you set up your experiment, so that it is more robust,
+yet use no more resources.
+
+## Blocking
+### Introduction
+Sub-dividing your experimental 'space' into 'blocks' can often improve the power
+of your experiments, without the need for any additional time, replicates or
+resources. Take a look at the following diagram, which represents the same
+experiment as before, i.e. the units are Petri dishes arranged on an incubator
+tray with/without antibiotic, or field plots with/without _Rhinanthus_ seed.
+
+![](www/randomised_block.png)
+
+The experiment is now arranged as having 5 'blocks' from left-to-right. Within
+each block there are 2 replicates for each treatment, but their arrangement
+within these blocks is completely random.
+
+### How does blocking help?
+Imagine the left-hand side of the grid in the diagram above is next to the door
+of the incubator, or farm track in the field experiment. Hopefully you can see
+both treatments occur close to the door, or farm track, and both treatments are
+also preset at the back of the incubator or a long way from the farm-track at
+the right-hand side of the grid. This didn't happen in the earlier fully
+randomised design, so is an immediate improvement.
+
+This improved design also increases your ability to detect whether your treatments
+are actually doing anything. In a linear model, your overall pattern is:
+
+$$\text{Response} = \text{Explanatory variable} + Error$$
+where in these examples you have
+
+$$\text{Response} = \text{Explanatory variable} + Error$$
+where the $Error$ is the unknown variation or 'noise' in your data. In these 2
+examples you have
+$$\text{Bacterial growth} = \text{control/antibiotic} + Error$$
+and
+$$\text{Wildflower diversity} = \text{control/Rhinanthus} + Error$$
+Remember that you have two columns, one with your response variable, and one with
+your explanatory variable, with each row of the latter categorised into which 
+treatment 'level' is applied.
+
+The overall importance of your explanatory variable is determined by the amount
+of variation it explains relative to the amount of unknown $Error$ variation. Recall
+that the F-value in an ANOVA table is based on the ratio of mean squares (variances)
+in your explanatory variable : error. **Key points** arising from this are:
+
+* If the $Error$ is large it is going to be harder to detect an effect from your
+explanatory variable
+* The $Error$ might be increased due to changes across your experimental units,
+for example whether your Petri dishes are near the incubator door, or your field
+plots are near the road
+* If you explicitly account for this systematic variation across your experiment,
+you can **reduce** the $Error$ and **increase** your ability to detect an effect
+from your explanatory variables.
+
+So, you can replace your original linear model:
+
+$$\text{Response} = \text{Explanatory variable} + Error$$
+with this one:
+
+$$\text{Response} = \text{Explanatory variable} + \text{Block} + Error$$
+In the second linear model the $Error$ will be smaller, as some of the variation
+is accounted for by Block. As a result, you are more likely to find an effect
+from the explanatory variable.
+
+
+## Worked example of randomised blocks
+Here is a simple experiment to investigate the effects of nitrogen (N) and
+phosphorous (P) on plant biomass. There are four blocks, and also an untreated
+control. The following exercise contains the results in a data.frame called
+`plant_growth`, read in as a 4 row (blocks) by 4 column (block, control, N, P).
+Create two boxplots, one showing the differences in biomass according to treatment.
+
+**Hints**:
+
+* re-arrange the data so that they are in a 3 column table called `plant_growth_lng`
+using the `pivot_longer()` function.
+* Use the `gf_boxplot()` function to create the plot.
+
+```{r biomass_boxplot-setup}
+# Avoid confusing with other data.frames
+rm(lolium)
+rm(plasma)
+```
+
+```{r biomass_boxplot, exercise=TRUE}
+
+```
+
+```{r biomass_boxplot-solution}
+plant_growth_lng <- pivot_longer(plant_growth,
+                                 cols = Control:P,
+                                 names_to = "fertiliser",
+                                 values_to = "biomass")
+
+gf_boxplot(biomass ~ fertiliser, data=plant_growth_lng)
+```
+
+Before we go any further, do a quick `summary` of the data in your `plant_growth_lng`
+dataset.
+
+```{r coding_of_blocks, echo=FALSE}
+question("What additional change is needed before you can analyse the data with
+         a linear model?",
+  answer("The blocks need to be recoded A to D", message = "Not essential, although
+         if they had originally been coded as A to D rather than 1 to 4 this extra
+         step would not be needed"),
+  answer("The biomass values need to have units", message = "R can undertake the
+         calculations without the need for units, but when displayed in a graph
+         it is good practice to show the units"),
+  answer("The rows need to be re-ordered to match their arrangement in the
+         field", message = "No, you would only need to do this if you had large
+         amounts of data and wanted to do a very complex spatial analysis."),
+  answer("The summary() function gave min,mean,max values for the blocks. This
+         suggests they are not being read by R as categorical", correct = TRUE,
+         message = "R has interpreted the blocks as a continuous explanatory
+         variable, whereas it should be categorical."),
+  allow_retry = TRUE
+  )
+```
+
+In the following exercise do the following with the `plant_growth_lng` dataset:
+
+* recode the `block` variable to be categorical. **Hint**: use `as.factor()` function;
+Use the `summary()` function before and after re-coding to check the differnce
+* create a linear model `plant_growth_lm1` with only fertiliser as the explanatory
+variable
+* create a linear model `plant_growth_lm2` with both fertiliser and block as
+explanatory variables
+* compare the Anova tables for each model
+
+```{r biomass_lm_setup}
+plant_growth_lng <- pivot_longer(plant_growth,
+                                 cols = Control:P,
+                                 names_to = "fertiliser",
+                                 values_to = "biomass")
+rm(plant_growth)
+rm(lolium)
+rm(plasma)
+```
+```{r biomass_lm, exercise=TRUE, exercise.setup = "biomass_lm_setup"}
+
+```
+```{r biomass_lm-solution}
+# summary() function shows R mis-interprets block as continuous
+summary(plant_growth_lng)
+
+# Use the as.factor() function to ensure R recognises block as categorical
+plant_growth_lng$block <- as.factor(plant_growth_lng$block)
+summary(plant_growth_lng)
+
+# Create your two linear models
+plant_growth_lm1 <- lm(biomass ~ fertiliser, data=plant_growth_lng)
+plant_growth_lm2 <- lm(biomass ~ fertiliser + block, data=plant_growth_lng)
+
+# Check their ANOVA tables
+Anova(plant_growth_lm1)
+Anova(plant_growth_lm2)
+```
+
+Look at the output from the two `summary()` functions (use the Solution button
+if you get stuck) and note how R codes the blocks correctly after using `as.factor()`.
+The `$` symbol allows you to reference an individual column by name in R.
+
+Study the two ANOVA tables.
+```{r compare_anova_tables, echo=FALSE}
+question("Which of the following statements about the ANOVA tables are true? (select ALL that apply)",
+  answer("The variance for fertiliser is the same in both tables", correct = TRUE),
+  answer("There is no replication"),
+  answer("The residual sums of squares in the first ANOVA = the residual SS + 
+         block SS in the second ANOVA", correct = TRUE),
+  answer("The total degrees of freedom in both tables is the same", correct = TRUE),
+  answer("There is a significant change in the biomass depending on the position
+         in the field where the experiment is undertaken", correct = TRUE),
+  answer("The F-value is higher for the fertiliser treatment when blocks are used
+         because the residual variance is smaller", correct =TRUE)
+)
+```
+
+### Other examples of where blocks might be used
+There are lots of other ways in which you can use blocks to improve your experiment
+Examples might include:
+
+* If an experimental unit is an individual plant or animal, group (block) your units 
+according to their initial weight
+* Birds might be blocked according to initial size, or initial egg batch, or
+laying date
+* Nesting sites might be blocked according to distance from urban areas
+* Glasshouse plants might be blocked according to light intensity in different
+parts of the glasshouse
+
+Some of these 'blocking' variables are on continuous scales, such as distance
+or light intensity. You can sub-divide a continuous scale into discrete categories
+to help you block experiments if you want to eliminate that variable from your
+experiment.
+
+It is possible to block with 2 (or more) variables to get rid of the effect of
+multiple unwanted variables. These are referred to as _Latin square_ designs
+for 2 variables, or _Latin hypercubes_ when there are lots of variables. Given
+the Star Trek/Star Wars name of the latter, you'll be glad we won't go into them
+in this module.
+
+
+## Summary
+Think about ways in which you can use block designs to improve your experiments,
+rather than always using a fully-randomised design. If you are an ecologist or
+zoologist working in the field, these block designs can be harder to construct,
+but solutions include blocking by site, type of habitat etc. If you are able to
+block your design your can reduce the amount of unexplained noise, making it
+easier to detect treatment effects.

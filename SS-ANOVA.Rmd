@@ -1,0 +1,625 @@
+---
+title: "Anova: how does it work and how should I use it?"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(mosaic)
+library(car)
+library(magrittr)
+caterpillers <- read.csv("www/regression.csv")
+crop_growth  <- read.csv("www/crop_growth.csv")
+caterpillers_lm <- lm(growth ~ tannin, data=caterpillers)
+caterpillers_resid <- residuals(caterpillers_lm)
+caterpillers_fitted <- fitted(caterpillers_lm)
+crop_growth_lm <- lm(yield ~ soil, data=crop_growth)
+crop_growth_resid <- residuals(crop_growth_lm)
+crop_growth_fitted <- fitted(crop_growth_lm)
+
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## ANOVA: a common output from linear models
+
+### Introduction
+You have already used the `Anova` command when you looked at the outputs from
+some of your earlier linear models. It can be used on linear models where the
+explanatory variable(s) are categorical or continuous, and can even be used to
+compare different linear models.  So, for example, you might have R code such
+as:
+
+`bacteria_lm1 <- lm(bacteria_growth ~ antibiotic_concentration, data=bacteria)`
+
+where your response is the continuous variable `bacteria_growth`, and your
+explanatory variable is the continuous variable `antibiotic_concentration`.
+You might create a more complicated model, including incubation temperature as
+a continuous explanatory variable:
+
+`bacteria_lm2 <- lm(bacteria_growth ~ antibiotic_concentration + temperature, data=bacteria)`
+
+Which is the better linear model, `bacteria_lm1` or the more complex one
+`bacteria_lm2`. You can easily see if there is a statistically significant
+difference between the models using the `Anova` command:
+
+`Anova(bacteria_lm1, bacteria_lm2)`
+
+which will print out an ANOVA table and p-value.
+
+```{r which_lm}
+question("If you performed an Anova function on bacteria_lm1 and bacteria_lm2
+         and the p-value is greater than 0.05, which linear model is better for
+         your data?",
+         answer("bacteria_lm1", correct = TRUE, message = "Good. As there is
+                no statistically significant different, because p>0.05, you
+                should select the simpler linear model"),
+         answer("bacteria_lm2", message = "No. The p-value is greater than 0.05
+                which means that there is no significant difference in the
+                explanatory power of the two linear models. You should always
+                try and use the simpler of the models where possible"))
+```
+
+To refresh you memory of how R summarises the results of linear models, re-create
+the caterpiller growth and crop linear models you have already used. Remember that
+
+* The `caterpillers` data.frame contains two columns `tannin` and `growth`
+* The `crop_growth` data.frame contains two columns `soil` and `yield`
+
+Create the linear models again using `lm()` making sure you know which is your 
+response and explanatory variable in each case, use the `summary()` to show the
+detailed information about model parameters. To show the full output, we will
+use the "base" R command `anova()` rather than `Anova()` for the ANOVA tables.
+The base R `anova()` command produces more complex output, but it will help you
+to understand how ANOVA works.
+
+The solution is provided if you get really stuck, but try it on your own first.
+
+```{r lm_models, exercise=TRUE}
+
+```
+```{r lm_models-solution}
+head(caterpillers) # Remind yourself of what the data looks like!
+caterpiller_lm <- lm(growth ~ tannin, data=caterpillers)
+summary(caterpiller_lm)
+anova(caterpiller_lm)
+
+head(crop_growth)
+crop_growth_lm <- lm(yield ~ soil, data=crop_growth)
+summary(crop_growth_lm)
+anova(crop_growth_lm)
+```
+
+The outputs from the `summary()` function are slightly different, as the
+`caterpillers_lm` has a continuous explanatory variable, whereas the 
+`crop_growth_lm` has a categorical explantory variable. However, you'll notice
+that the overall format of the outputs from the `anova()` function is the same.
+
+The abbreviation **ANOVA** stands for **analysis of variance** yet
+the output table does not have anything described as a variance. Why?
+
+```{r where_is_variance}
+question("Why is there no column headed 'variance' in the ANOVA table?",
+         answer("Variance and SE are calculated separately, but for simplicity
+                they are not displayed in the ANOVA output", message = "No. 
+                Remember that a variance is simply the 'average' or 'mean' of
+                the Sums of Squares. So the column headed 'Mean Sq' contains
+                the variances"),
+         answer("Sums of squares divided by the degrees of freedom are variances", 
+                correct = TRUE, message = "Good. Dividing by the degrees of 
+                freedom produces an average or 'mean sums of squares', shown as
+                'Mean Sq' in the table. A 'Mean Sq' is another name for a
+                variance"),
+         allow_retry = TRUE)
+```
+
+So, now you can understand where the variances are, you might be wondering 
+**why do we test the importance of explanatory variables by their variances?** or 
+**How does ANOVA work**
+
+We will show this interactively, with examples similar to your `caterpillers`
+and `crop_yield` datasets.
+
+## Variances with continuous explanatory variables
+Your R output from the `summary()` function of the `caterpillers_lm` results
+gave you the intercept and gradient of your fitted line. Plot your original
+raw data and the fitted line to remind you of what it looks like. **Hint** Use
+the `gf_point()` and `gf_lm()` functions you have already used:
+
+```{r lm_caterpillers, exercise=TRUE, exercise.completion = FALSE}
+
+```
+```{r lm_caterpillers-solution}
+gf_point(growth ~ tannin, data=caterpillers) %>% 
+  gf_lm()
+```
+
+Compare the intercept (where the fitted line crosses the vertical axis) and slope
+with the output from your earlier `summary()` function on this model. Note that
+the slope is negative as the observations decline from left to right.
+
+### How does `lm()` know where to put the fitted line?
+The `lm()` function uses the technique of **least squares**, i.e. it tries to
+minimise the sums of squares around your fitted line and the observations. There
+are three sets of SS that are calculated, which are then converted into the
+variances (Mean Sq) used in your ANOVA table:
+
+* SS explanatory variable (the bigger this is, the stronger the relationship
+between your response variable and explanatory variable)
+* SS error (variation in your observations caused by random noise or measurement errors)
+* SS total (Total variation in your data from all sources) SS explanatory + SS
+error = SS total.
+
+The following interactive chart allows you to visualise these different
+components.
+
+```{r, echo=FALSE}
+
+
+fluidPage(
+    # Application title
+    titlePanel("Caterpiller data"),
+
+    sidebarLayout(
+        sidebarPanel(
+            radioButtons("SS_source", label = h3("Source of variation"),
+                         choices = list("SS explanatory variable" = 1, "SS error (unknown)" = 2, "SS total" = 3), 
+                         selected = 3),
+            hr(),
+            fluidRow(column(12, verbatimTextOutput("value")))
+        ),
+
+        # Show a plot of the generated distribution
+        mainPanel(
+           plotOutput("distPlot")
+        )
+    )
+)
+```
+
+```{r, context="server"}
+    p <- reactive({
+        if(input$SS_source == "3"){
+            linplot <- ggplot(aes(x = tannin, y = growth), data = caterpillers) +
+                geom_point() +
+                geom_hline(yintercept = mean(caterpillers$growth)) +
+                geom_segment(yend = mean(caterpillers$growth), xend = caterpillers$tannin, colour = "grey") +
+                ggtitle("SS total: differences from the mean of growth") +
+                theme_classic()
+            return(linplot)
+        } else if (input$SS_source == "2"){
+            linplot <- ggplot(aes(x = tannin, y = growth), data = caterpillers) +
+                geom_point() +
+                geom_smooth(method="lm", se=FALSE) +
+                geom_segment(yend = caterpillers_fitted, xend = caterpillers$tannin, colour="red") +
+                ggtitle("SS error: unknown variation around fitted line") +
+                theme_classic()
+            return(linplot)
+        } else {
+            linplot <- ggplot(aes(x = tannin, y = growth), data = caterpillers) +
+                geom_point() +
+                geom_hline(yintercept = mean(caterpillers$growth)) +
+                geom_smooth(method="lm", se = FALSE) +
+                geom_segment(y = caterpillers_fitted, yend = mean(caterpillers$growth), xend = caterpillers$tannin, colour="green") +
+                ggtitle("SS model = SS total - SS error: bigger lines are better") +
+                theme_classic()
+            return(linplot)
+        }
+    })
+    
+    ssvalue <- reactive({
+        if(input$SS_source == "3"){
+            sstotal <- round(sum((mean(caterpillers$growth) - caterpillers$growth)^2),2)
+            return(paste("SS total", sstotal, "\nMS total", round(sstotal/8, 2)))
+        } else if(input$SS_source == "2"){
+            sserror <- round(sum((caterpillers_fitted - caterpillers$growth)^2),2)
+            return(paste("SSE error", sserror, "\nMS error", round(anova(caterpillers_lm)[3][2,],2)))
+        } else {
+            sstotal <- round(sum((mean(caterpillers$growth) - caterpillers$growth)^2),2)
+            sserror <- round(sum((caterpillers_fitted - caterpillers$growth)^2),2)
+            ssmodel <- sstotal - sserror
+            return(paste("SS explanatory variable", ssmodel, "\nMS explanatory",  round(anova(caterpillers_lm)[3][1,],2)))
+        }
+    })
+    
+    output$distPlot <- renderPlot({
+        p()
+    })
+    output$value <- renderText({
+      ssvalue()
+    })
+
+```
+
+You can see that the SS for the explanatory variable is bigger than that for
+the SS for the error. When these are converted to variances (Mean Squares, MS),
+the difference is even bigger. In fact the explanatory variable (tannin) SS and
+MS values are identical. Why?
+
+```{r why_is_tannin_SS_MS_same}
+question("Why are the sums of squares and mean squares the same for the tannin
+         (explanatory variable in this example)?",
+         answer("The SS and MS (variance) are always the same in linear models",
+                message = "No. MS are calculated by dividing the SS by the degrees
+                of freedom (df). Here the df=1, but this may not be true when you
+                have categorical explanatory variables."),
+         answer("SS is divided by df to calculate MS. Here the df for tannin is
+                1 therefore the SS = MS", correct = TRUE, message = "Good. In this
+                example the df for tannin is 1 there SS and MS are the same. Note
+                that often with categorical explanatory variables the df can be
+                greater than 1, depending on the number of categories."),
+         allow_retry = TRUE)
+```
+
+It is the **relative** value of the MS error and MS tannin that provides an 
+indication of the importance of the tannin explanatory variable. Here is the 
+output from your linear model:
+
+```{r lm_caterpillers_reminder}
+caterpiller_lm <- lm(growth ~ tannin, data=caterpillers)
+Anova(caterpiller_lm)
+```
+
+Look at the value headed F-value. This is 30.97. Can you see how it has been
+calculated?
+
+$$ \mbox{F-value} = \frac{\mbox{MS tannin}}{\mbox{MS error}}=\frac{88.82}{2.87}=30.97$$
+
+For this reason the **F-value** is often called the **F-ratio**. The larger the
+F-value the more important the explanatory variable. You can see that if the 
+MS tannin is big, and the MS error is small, then the F-value will be bigger.
+
+### How is the p-value calculated?
+The p-value represents the probability of getting the observed F-value, for the
+given degrees of freedom (1 and 7 in this case), if there was **no effect of
+tannins** . Yes, I agree that is a bit back-to-front, but a mad statistician
+called Sir Ronald Fisher (hence F-value) came up with this idea in the 1920's.
+Hence, the lower the p-value, the bigger the **assumed** effect of the explanatory
+variable. I've put in the word "assumed" in bold, because the p-value is the
+probability that tannin is **not** doing anything to the growth.
+
+### Interactive to explain ANOVA with continuous explanatories
+This interactive allows you to play with the "noisiness" of your tannin and 
+growth data. Obviously, in the real world you can't do this, but it will help
+you understand how the SS, MS, F-value and P-value change as the data fit the 
+model better or worse. The R-squared statistic is also displayed. You can also
+use a slider to adjust how many observations are in your data (if only collecting
+more data was this easy!). Play with both sliders, then answer the questions
+below. You will get slightly different outputs every time you adjust the sliders
+as there is random variation in the data.
+
+```{r, echo=FALSE}
+fluidPage(
+    # Application title
+    titlePanel("Adjust noise and observations"),
+
+    # Sidebar with a slider input for number of bins
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput("noise",
+                        "Amount of noise in data",
+                        min = 0,
+                        max = 20,
+                        value = 5),
+            sliderInput("nvals",
+                        "Number of observations",
+                        min = 3,
+                        max = 20,
+                        value = 9)
+        ),
+
+        # Show a plot of the generated distribution
+        mainPanel(
+           plotOutput("myplot"),
+           verbatimTextOutput("anovatable")
+        )
+    )
+)
+```
+```{r, context="server"}
+    pltdata <- reactive({
+        n <- input$nvals
+        a <- 11.7556
+        b <- -1.2167
+        sigma2 <- 4.4793
+
+        x <- seq(0, 9, 9/n)
+        eps <- rnorm(n, mean=0, sd=sqrt(input$noise))
+        y <- a + b*x + eps
+        return(data.frame(tannin=x, growth=y))
+    })
+
+    output$myplot <- renderPlot({
+
+        gf_point(growth ~ tannin, data=pltdata()) %>%
+            gf_lm() %>%
+            gf_lims(x=c(0,9), y=c(0,15))
+    })
+
+    output$anovatable <- renderPrint({
+        anova(lm(growth ~ tannin, data=pltdata()))
+    })
+
+```
+
+```{r interpret_lm_shiny}
+question("Having adjusted the sliders and looked at the plot and anova table
+         output, which of the following statements is true?",
+         answer("Only the number of observations affects the F-value.",
+                message = "No. The F-value is affected by both the number of
+                observations and the amount of variation (noise) in the data."),
+         answer("Only the variation in the observation data affects the F-value.",
+                message = "No. The F-value is affected by both the number of
+                observations and the amount of variation (noise) in the data."),
+         answer("Both the amount of noise and the number of observations affect
+                the F-value", correct = TRUE, message = "Good. The less variation
+                there is in the data, and the larger the number of observations,
+                the greater the F-value"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE)
+```
+
+
+### How does `lm` know where to put the fitted line?
+It uses the technique of **Least Squares**. Basically it tries to **minimise **
+**the MS error**. If you look at the fitted line, you'll see that it goes through
+the mean value of the tannin (4.00) and the mean value of the growth (6.89) as
+shown below. It then simply adjusts the slope to minimise the SS error, and hence
+the MS error.
+
+```{r lm_with_means_xy}
+gf_point(growth ~ tannin, data=caterpillers) %>% 
+  gf_lm(growth ~ tannin, data=caterpillers) %>% 
+  gf_hline(yintercept = mean(caterpillers$growth), colour = "red", linetype = "dashed") %>% 
+  gf_vline(xintercept = mean(caterpillers$tannin), colour = "green", linetype = "dashed") %>% 
+  gf_theme(theme_classic())
+```
+
+## Variances with categorical explanatory variables
+We'll use the same approach to understand what is going on with categorical data
+using the `crop_growth` dataset that showed the change in growth on three different
+soil types. You will recall that these data could be summarised easily via the
+`gf_boxplot()` function, and the the `lm()` linear model indicated that soil type
+had a significant effect on yield. The boxplot and Anova table are shown below:
+
+```{r crop_yield_info}
+gf_boxplot(yield ~ soil, data=crop_growth)
+crop_growth_lm <- lm(yield ~ soil, data = crop_growth)
+Anova(crop_growth_lm)
+```
+Again there are sums of squares for soil, a 'Residual' sums of squares (noise in
+the data). Not shown in the table is the Total Sums of squares. The process of
+calculation is identical to that for the previous `caterpiller` example with
+continuous explanatory variable, i.e.
+
+$$\mbox{SS soil} = \mbox{SS total} - \mbox{SS error}$$
+but it may be less obvious how the various components are calculated, especially
+$\mbox{SS total}$ and $\mbox{SS error}$. As before, we'll use an interactive to
+show three components. Note that as the explanatory variable is categorical, so
+that you can see the individual observations, they are simply shown in the order
+in the original dataset (i.e. row number):
+
+```{r, echo=FALSE}
+
+fluidPage(
+    # Application title
+    titlePanel("Crop growth data"),
+
+    sidebarLayout(
+        sidebarPanel(
+            radioButtons("SS_source2", label = h3("Source of variation"),
+                         choices = list("SS explanatory variable (soil)" = 1, "SS error (unknown)" = 2, "SS total" = 3),
+                         selected = 3),
+            hr(),
+            fluidRow(column(12, verbatimTextOutput("value2")))
+        ),
+
+        # Show a plot of the generated distribution
+        mainPanel(
+           plotOutput("distPlot2")
+        )
+    )
+)
+```
+
+```{r, context="server"}
+    p2 <- reactive({
+        if(input$SS_source2 == "3"){
+            linplot <- ggplot(aes(x = 1:30, y = yield, colour = soil), data = crop_growth) +
+                geom_point() +
+                geom_hline(yintercept = mean(crop_growth$yield), linetype = "dashed") +
+                geom_segment(yend = mean(crop_growth$yield), xend = 1:30) +
+                ggtitle("SS total: differences from the mean of yield") +
+                ylab("yield") +
+                xlab("observation number") +
+                theme_classic()
+            return(linplot)
+        } else if (input$SS_source2 == "2"){
+            linplot <- ggplot(aes(x = 1:30, y = crop_growth$yield, colour = soil), data = crop_growth) +
+                geom_point() +
+                geom_segment(x =  1:10,  y=crop_growth$yield[1:10], yend = mean(crop_growth$yield[1:10]), xend =  1:10, data=crop_growth[1:10,]) +
+                geom_segment(x = 11:20, y=crop_growth$yield[11:20], yend = mean(crop_growth$yield[11:20]), xend = 11:20, data=crop_growth[11:20,]) +
+                geom_segment(x = 21:30, y=crop_growth$yield[21:30], yend = mean(crop_growth$yield[21:30]), xend = 21:30, data=crop_growth[21:30,]) +
+                geom_segment(x = 1, y=mean(crop_growth$yield[1:10]), yend=mean(crop_growth$yield[1:10]), xend = 10, data=crop_growth[1:10,]) +
+                geom_segment(x = 11, y=mean(crop_growth$yield[11:20]), yend=mean(crop_growth$yield[11:20]), xend = 20, data=crop_growth[11:20,]) +
+                geom_segment(x = 21, y=mean(crop_growth$yield[21:30]), yend=mean(crop_growth$yield[21:30]), xend = 30, data=crop_growth[21:30,]) +
+                ylab("yield") +
+                xlab("observation number") +
+                ggtitle("SS error: unknown variation around fitted line (mean for each soil type) ") +
+                theme_classic()
+            return(linplot)
+        } else {
+            linplot <- ggplot(aes(x = 1:30, y = yield, colour = soil), data = crop_growth) +
+                geom_point() +
+                geom_hline(yintercept = mean(crop_growth$yield), linetype = "dashed") +
+                geom_segment(x = 1, y=mean(crop_growth$yield[1:10]), yend=mean(crop_growth$yield[1:10]), xend = 10, data=crop_growth[1:10,]) +
+                geom_segment(x = 11, y=mean(crop_growth$yield[11:20]), yend=mean(crop_growth$yield[11:20]), xend = 20, data=crop_growth[11:20,]) +
+                geom_segment(x = 21, y=mean(crop_growth$yield[21:30]), yend=mean(crop_growth$yield[21:30]), xend = 30, data=crop_growth[21:30,]) +
+                ylab("yield") +
+                xlab("observation number") +
+                ggtitle("SS model = SS total - SS error") +
+                theme_classic()
+            return(linplot)
+        }
+    })
+
+    ssvalue2 <- reactive({
+        if(input$SS_source2 == "3"){
+            sstotal <- round(sum((mean(crop_growth$yield) - crop_growth$yield)^2),2)
+            return(paste("SS total ", sstotal, "\nMS total", round(sstotal/29,2)))
+        } else if(input$SS_source2 == "2"){
+            sserror <- round(sum((crop_growth_fitted - crop_growth$yield)^2),2)
+            return(paste("SSE error ", sserror, "\nMS error", round(sserror/27,2)))
+        } else {
+            sstotal <- round(sum((mean(crop_growth$yield) - crop_growth$yield)^2),2)
+            sserror <- round(sum((crop_growth_fitted - crop_growth$yield)^2),2)
+            ssmodel <- sstotal - sserror
+            return(paste("SS soil ", ssmodel, "\nMS soil", round(ssmodel/2,2)))
+        }
+    })
+
+    output$distPlot2 <- renderPlot({
+        p2()
+    })
+    output$value2 <- renderText({
+        ssvalue2()
+    })
+
+```
+
+**Remember**. The mean squares (MS) are the variances, which are calculated by
+dividing the _SS total_, _SS error_ and _SS soil_ by their degrees of freedom
+(29, 27 and 2 respectively). It is the **ratio** of the MS soil to MS error that
+is used to calculate the F-value. The larger the F-value, the bigger the effect
+of soil.
+
+### Interactive to demonstration
+The interactive below allows you to alter the number of observations per soil
+type, and the overall amount of noise (variability) in your crop yield data.
+Look at the ANOVA table printed below the graph, and notice how both the F-value
+changes and the associated p-statistic. The F-value on its own does not indicate
+whether the soil is significant. It is both the F-value and the degrees of freedom
+(calculated from the number of observations) that matter.
+
+```{r, echo=FALSE}
+fluidPage(
+   # Application title
+   titlePanel("ANOVA variation demo"),
+
+     sidebarLayout(
+         sidebarPanel(
+             sliderInput("noise2",
+                         "Amount of noise in data",
+                         min = 0,
+                         max = 10,
+                         value = 5),
+             sliderInput("nvals2",
+                         "Number of observations per group",
+                         min = 3,
+                         max = 20,
+                         value = 10)
+         ),
+
+         # Show a plot and ANOVA table
+         mainPanel(
+             plotOutput("myplot3"),
+             verbatimTextOutput("anovatable3")
+         )
+     )
+ )
+
+```
+```{r, context="server"}
+crop_growth3 <- reactive({
+
+       nsample <- input$nvals2
+       ngroups <- 3  # 3 soil types
+       group_means <- c(11.5, 14.3, 9.9) # mean soil type
+       sigma <- input$noise2
+       eps <- rnorm(nsample*ngroups, 0, sigma)
+       x <- rep(1:ngroups, rep(nsample, ngroups)) 	# Indicator for each level
+       means <- rep(group_means, rep(nsample, ngroups)) # duplicate means
+       X <- as.matrix(model.matrix(~as.factor(x) -1))   # Design matrix
+       y <- as.numeric(X %*% as.matrix(group_means) + eps)
+       x <- as.factor(x)
+       levels(x) <- c("clay", "loam", "sand")
+       return(data.frame(yield=y, soil=x))
+})
+
+output$myplot3 <- renderPlot({
+
+     ggplot(aes(x = 1:(input$nvals2*3), y = crop_growth3()$yield, colour = soil), data = crop_growth3()) +
+           geom_point() +
+           geom_segment(x =  1:input$nvals2,
+                        y=crop_growth3()$yield[1:input$nvals2],
+                        yend = mean(crop_growth3()$yield[1:input$nvals2]),
+                        xend =  1:input$nvals2,
+                        data=crop_growth3()[1:input$nvals2,]) +
+             geom_segment(x = (input$nvals2+1):(input$nvals2*2),
+                          y=crop_growth3()$yield[(input$nvals2+1):(input$nvals2*2)],
+                          yend = mean(crop_growth3()$yield[(input$nvals2+1):(input$nvals2*2)]),
+                          xend = (input$nvals2+1):(input$nvals2*2),
+                          data=crop_growth3()[(input$nvals2+1):(input$nvals2*2),]) +
+             geom_segment(x = (input$nvals2*2+1):(input$nvals2*3),
+                          y=crop_growth3()$yield[(input$nvals2*2+1):(input$nvals2*3)],
+                          yend = mean(crop_growth3()$yield[(input$nvals2*2+1):(input$nvals2*3)]),
+                          xend = (input$nvals2*2+1):(input$nvals2*3),
+                          data=crop_growth3()[(input$nvals2*2+1):(input$nvals2*3),]) +
+             geom_segment(x = 1,
+                          y=mean(crop_growth3()$yield[1:input$nvals2]),
+                          yend=mean(crop_growth3()$yield[1:input$nvals2]),
+                          xend = input$nvals2,
+                          data=crop_growth3()[1:input$nvals2,]) +
+             geom_segment(x = input$nvals2+1,
+                          y=mean(crop_growth3()$yield[(input$nvals2+1):(input$nvals2*2)]),
+                          yend=mean(crop_growth3()$yield[(input$nvals2+1):(input$nvals2*2)]),
+                          xend = input$nvals2*2, data=crop_growth3()[(input$nvals2+1):(input$nvals2*2),]) +
+             geom_segment(x = (input$nvals2*2+1),
+                          y=mean(crop_growth3()$yield[(input$nvals2*2+1):(input$nvals2*3)]),
+                          yend=mean(crop_growth3()$yield[(input$nvals2*2+1):(input$nvals2*3)]),
+                          xend = input$nvals2*3,
+                          data=crop_growth3()[(input$nvals2*2+1):(input$nvals2*3),]) +
+             ylab("yield") +
+             xlab("observation number") +
+             ylim(c(0, 25)) +
+             ggtitle("Changing number of observations and/or variability around mean ") +
+             theme_classic()
+
+})
+
+output$anovatable3 <- renderPrint({
+         anova(lm(yield ~ soil, data=crop_growth3()))
+})
+
+```
+
+
+```{r which_is_more_important}
+question("Which is more important in determining the statistical significance, here of the soil type on the yield, the variability in the data or the number of replicates",
+         answer("The number of replicates per treatment level (soil type) is most important",
+                message = "No. Mean Squares (MS or variance) is calculated by dividing the SS by
+                the degrees of freedom (df). In a categorical variable the number of
+                replicates is used to calculate df. But think how the SS is calculated!"),
+         answer("Both the variability in the data and the number of replicates are equally
+                important.",
+         correct = TRUE, message = "Good. In this example you can see that if there
+                are insufficient replicates per soil type, or too much noise in
+                the data, then it is not possible to detect a significant effect.
+                Noise in the data is represented through sums of squares (SS)
+                which is then corrected for the number of replicates (via degrees
+                of freedom or df) to calculate the mean square (MS variance). It is
+                the comparison of MS for your soil type, and MS from noise, that is
+                used to calculate the F-ratio. The larger the F-ratio for given
+                df the more significant the p-value."),
+         allow_retry = TRUE)
+```
+
+## Summary
+ANOVA tables can be produced from any type of linear model. By convention they
+are most commonly shown when the explanatory variable(s) is categorical, in 
+what is sometimes called 'one-way ANOVA' or 'two-way ANOVA' etc. However they
+can also be produced from linear models where you have continuous explanatory
+variable(s), in what is often called 'linear regression' or 'multiple
+regression'. Don't get confused by the "labels" some books attach to these
+statistical analyses: they are all forms of linear models.

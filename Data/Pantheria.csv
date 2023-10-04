@@ -1,0 +1,423 @@
+"","Common_name","Family","HB_max","W_max","Skull_max","HomeR_max","Density_max"
+"1","Chinese mountain cat","Felidae",84,9,10,NA,NA
+"2","Wildcat","Felidae",64,5.8,11.2,11.7,10
+"3","Wildcat","Felidae",75,7.7,11.2,13.7,10
+"4","Black footed cat","Felidae",41.5,1.6,8.7,8.6,NA
+"5","Black footed cat","Felidae",52,2.45,8.7,16.1,NA
+"6","Sand cat","Felidae",52,3.1,9.5,NA,NA
+"7","Sand cat","Felidae",57,3.4,9.5,16,NA
+"8","Jungle cat","Felidae",85,9,14,NA,NA
+"9","Jungle cat","Felidae",94,12.2,14,NA,NA
+"10","Leopard cat","Felidae",65.5,4.5,10.2,37.1,0.375
+"11","Leopard cat","Felidae",75,7.1,10.2,28.9,0.375
+"12","Pallas cat","Felidae",53,5,9.3,125.2,0.08
+"13","Pallas cat","Felidae",57,5.3,9.3,207,0.08
+"14","Flat headed cat","Felidae",52.1,1.9,9.8,NA,NA
+"15","Flat headed cat","Felidae",61,2.2,9.8,NA,NA
+"16","Rusty spotted cat","Felidae",48,1.1,7.9,NA,NA
+"17","Rusty spotted cat","Felidae",48,1.6,7.9,NA,NA
+"18","Fishing cat","Felidae",74.3,6.8,15.1,6,NA
+"19","Fishing cat","Felidae",115,16,15.1,22,NA
+"20","Marbled cat","Felidae",62,5,10.3,5.3,NA
+"21","Bay cat","Felidae",67,2,10,NA,NA
+"22","Asiatic golden cat","Felidae",94,8.5,15.7,32.6,NA
+"23","Asiatic golden cat","Felidae",105,15.8,15.7,47.7,NA
+"24","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"25","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"26","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"27","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"28","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"29","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"30","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"31","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"32","Servaltine genet","Felidae",92,18,14,31.5,NA
+"33","Servaltine genet","Felidae",92,18,14,31.5,NA
+"34","Servaltine genet","Felidae",92,18,14,31.5,NA
+"35","Servaltine genet","Felidae",92,18,14,31.5,NA
+"36","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"37","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"38","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"39","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"40","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"41","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"42","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"43","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"44","Servaltine genet","Felidae",92,18,14,31.5,NA
+"45","Servaltine genet","Felidae",92,18,14,31.5,NA
+"46","Servaltine genet","Felidae",92,18,14,31.5,NA
+"47","Servaltine genet","Felidae",92,18,14,31.5,NA
+"48","Caracal","Felidae",103,15.9,15,26.7,NA
+"49","Caracal","Felidae",108,26,15,65,NA
+"50","African golden cat","Felidae",101,8.2,14.6,NA,NA
+"51","African golden cat","Felidae",101,16,14.6,NA,NA
+"52","Geoffrys cat","Felidae",74,4.9,10.8,5.1,1.39
+"53","Geoffrys cat","Felidae",88,7.8,10.8,9.2,1.39
+"54","Oncilla","Felidae",51.4,3.2,8.5,25,0.05
+"55","Oncilla","Felidae",59.1,3.5,8.5,17.1,0.05
+"56","Margay","Felidae",62,3.5,10.7,20,NA
+"57","Margay","Felidae",79.2,4.9,10.7,15.9,NA
+"58","Ocelot","Felidae",90.9,11.3,15.8,75,0.12
+"59","Ocelot","Felidae",101.5,18.6,15.8,90.5,0.12
+"60","Colocolo","Felidae",79,3.7,10.2,NA,NA
+"61","Andean cat","Felidae",85,4,10.5,47.1,NA
+"62","Eurasian lynx","Felidae",130,21,15.3,1850,0.032
+"63","Eurasian lynx","Felidae",148,29,15.3,3000,0.032
+"64","Iberian lynx","Felidae",75.4,10,13.9,24.6,0.88
+"65","Iberian lynx","Felidae",82,15.9,13.9,25,0.88
+"66","Bobcat","Felidae",95.2,15.7,13.7,86,0.06
+"67","Bobcat","Felidae",95.2,15.7,13.7,86,0.28
+"68","Bobcat","Felidae",95.2,15.7,13.7,86,1
+"69","Bobcat","Felidae",105,18.3,13.7,325,0.06
+"70","Bobcat","Felidae",105,18.3,13.7,325,0.28
+"71","Bobcat","Felidae",105,18.3,13.7,325,1
+"72","Canada lynx","Felidae",96.5,11.8,13.9,133,0.45
+"73","Canada lynx","Felidae",96.5,11.8,13.9,18,0.45
+"74","Canada lynx","Felidae",107,17.3,13.9,277,0.45
+"75","Canada lynx","Felidae",107,17.3,13.9,44,0.45
+"76","Jaguarundi","Felidae",73.5,7,11.6,18,NA
+"77","Jaguarundi","Felidae",83.2,7.6,11.6,25.3,NA
+"78","Puma","Felidae",141,57,25,685,0.003
+"79","Puma","Felidae",141,57,25,685,0.03
+"80","Puma","Felidae",168,80,25,826,0.003
+"81","Puma","Felidae",168,80,25,826,0.03
+"82","Cheetah","Felidae",140,51,19.3,1836,0.02
+"83","Cheetah","Felidae",140,51,19.3,246,0.023
+"84","Cheetah","Felidae",152,64,19.3,195,0.023
+"85","Snow leopard","Felidae",117,53,20,1590,0.045
+"86","Snow leopard","Felidae",125,55,20,1628,0.045
+"87","Indochinese clouded leopard","Felidae",94,11.5,18,40,85
+"88","Indochinese clouded leopard","Felidae",108,25,18,43.5,NA
+"89","Diardis clouded leopard","Felidae",94,11.5,18,40,85
+"90","Diardis clouded leopard","Felidae",108,25,18,43.5,NA
+"91","Tiger","Felidae",177,177,37.9,51,0.19
+"92","Tiger","Felidae",177,177,37.9,761,0.014
+"93","Tiger","Felidae",300,261,37.9,243,0.19
+"94","Tiger","Felidae",300,261,37.9,2058,0.014
+"95","Lion","Felidae",192,168,42,184,0.38
+"96","Lion","Felidae",192,168,42,NA,0.0062
+"97","Lion","Felidae",250,272,42,184,0.38
+"98","Lion","Felidae",250,272,42,6542,0.0062
+"99","Leopard","Felidae",123,42,28.2,27,0.12
+"100","Leopard","Felidae",123,42,28.2,488.7,0.014
+"101","Leopard","Felidae",191,90,28.2,136,0.12
+"102","Leopard","Felidae",191,90,28.2,2321.5,0.014
+"103","Jaguar","Felidae",219,100,30.6,83,0.088
+"104","Jaguar","Felidae",219,100,30.6,98,0.11
+"105","Jaguar","Felidae",270,158,30.6,108,0.088
+"106","Jaguar","Felidae",270,158,30.6,268,0.11
+"107","Aardwolf","Hyaenidae",80,14,15.5,6,NA
+"108","Striped Hyaena","Hyaenidae",119,41,26.5,115,0.03
+"109","Brown Hyaena","Hyaenidae",136,49.5,27.5,170,0.029
+"110","Brown Hyaena","Hyaenidae",136,49.5,27.5,350,0.029
+"111","Brown Hyaena","Hyaenidae",136,49.5,27.5,1900,0.029
+"112","Spotted Hyaena","Hyaenidae",160,79,29.2,1500,0.008
+"113","Spotted Hyaena","Hyaenidae",160,79,29.2,1500,0.2
+"114","Spotted Hyaena","Hyaenidae",160,79,29.2,1500,0.8
+"115","Spotted Hyaena","Hyaenidae",160,79,29.2,1500,1.7
+"116","Small Indian Mongoose","Herpestidae",44.6,0.662,7.3,1,300
+"117","Small Asian Mongoose","Herpestidae",41.5,1,8.4,NA,NA
+"118","Short tailed mongoose","Herpestidae",49,3,10,2.5,NA
+"119","Indian Grey Mongoose","Herpestidae",46,2,8.2,0.16,NA
+"120","Collared Mongoose","Herpestidae",46,4,9,NA,NA
+"121","Brown Mongoose","Herpestidae",48,2.7,NA,NA,NA
+"122","Crab-eating mongoose","Herpestidae",55.8,4,9.8,NA,NA
+"123","Ruddy mongoose","Herpestidae",47,2.7,9,NA,NA
+"124","Striped-necked mongoose","Herpestidae",53,3.4,10.3,NA,NA
+"125","Cape grey mongoose","Herpestidae",41.5,1.25,7.4,0.92,NA
+"126","Somali slender mongoose","Herpestidae",29,0.75,NA,NA,NA
+"127","Kakoveld slender mongoose","Herpestidae",35.5,0.9,NA,1.45,NA
+"128","common slender mongoose","Herpestidae",35.5,0.79,6.7,1,6
+"129","Egyptian mongoose","Herpestidae",61,4.1,10.7,3.1,2
+"130","Marsh mongoose","Herpestidae",62,4.1,11.1,2.04,1.8
+"131","Long nosed mongoose","Herpestidae",61,4.5,11.4,1,NA
+"132","White tailed mongoose","Herpestidae",71,5.2,11.6,4.3,4.3
+"133","Bushy tailed mongoose","Herpestidae",50,2.1,9.7,NA,NA
+"134","Jacksons mongoose","Herpestidae",57.1,3,11,NA,NA
+"135","Black legged mongoose","Herpestidae",65,4.8,12.5,NA,NA
+"136","Meerkat","Herpestidae",29,0.97,6.5,10,1.69
+"137","Yellow mongoose","Herpestidae",46,0.9,7.8,1.02,NA
+"138","Selous's mongoose","Herpestidae",47,2.2,9,NA,NA
+"139","Mellers mongoose","Herpestidae",48.5,3,9,NA,NA
+"140","Pousargues mongoose","Herpestidae",33,0.4,6,NA,NA
+"141","Somali Dwarf mongoose","Herpestidae",27,0.35,6,NA,NA
+"142","common dwarf mongoose","Herpestidae",23,0.34,6,0.96,30.9
+"143","gambian mongoose","Herpestidae",45,2.2,7.3,NA,NA
+"144","Banded mongoose","Herpestidae",45,1.9,7.9,2,18
+"145","Banded mongoose","Herpestidae",45,1.9,7.9,NA,3
+"146","Liberian mongoose","Herpestidae",46.8,2.3,10,NA,NA
+"147","Angolan cusimanse","Herpestidae",36,1.5,6.7,NA,NA
+"148","Flat headed Cusimanse","Herpestidae",36,1.5,7,NA,NA
+"149","common cusimanse","Herpestidae",37,1,7.4,1.4,17
+"150","Alexanders cusimanse","Herpestidae",44,2,8,NA,NA
+"151","Falanouc","Eupleridae",65,4.6,9.7,NA,NA
+"152","Fosa","Eupleridae",80,8.6,14,27,5.5
+"153","Broad striped vontsira","Eupleridae",34,0.74,7.4,NA,NA
+"154","Ring tailed vontsira","Eupleridae",38,1.09,7.2,0.25,NA
+"155","Brown tailed vontsira","Eupleridae",38,0.78,7,NA,NA
+"156","Grandidiers Vontsira","Eupleridae",48,1.7,8.5,NA,NA
+"157","Banded linsang","Prionodontidae",45,0.8,7.9,NA,NA
+"158","spotted linsang","Prionodontidae",45,1.2,7.3,NA,NA
+"159","Small toothed palm civet","Viverridae",53.2,2.5,12,NA,NA
+"160","Golden palm civet","Viverridae",58,3.6,10.6,NA,NA
+"161","Brown palm civet","Viverridae",61.5,4.3,11.5,0.18,NA
+"162","Brown palm civet","Viverridae",61.5,4.3,11.5,0.56,NA
+"163","Sulawesi palm civet","Viverridae",71,6.1,14.5,NA,NA
+"164","Masked palm civet","Viverridae",87,5,13.7,3.7,NA
+"165","Masked palm civet","Viverridae",87,5,13.7,5.9,NA
+"166","Common palm civet","Viverridae",71,5,12,1.4,NA
+"167","Common palm civet","Viverridae",71,5,12,4.2,NA
+"168","Binturong","Viverridae",97,20,15.6,20.5,NA
+"169","Owstons civet","Viverridae",72,4.2,11.3,NA,NA
+"170","Banded civet","Viverridae",56.5,3,10.7,NA,NA
+"171","Hose's civet","Viverridae",54,1.3,10.5,NA,NA
+"172","Otter civet","Viverridae",68,5,12.5,NA,NA
+"173","Malabar civet","Viverridae",85,8,14.5,NA,NA
+"174","Large spotted civet","Viverridae",85,9,15,NA,NA
+"175","Malay civet","Viverridae",77.3,7,10.2,1.28,2.2
+"176","Malay civet","Viverridae",77.3,7,10.2,2.83,2.2
+"177","Large indian civet","Viverridae",85,9,14.4,12,NA
+"178","Small indian civet","Viverridae",68,4,10.7,3.1,NA
+"179","African civet","Viverridae",48,20,15.5,11.1,NA
+"180","Abyssian genet","Viverridae",43,2,9,NA,NA
+"181","Hausa genet","Viverridae",45,1.5,9.3,NA,NA
+"182","Crested genet","Viverridae",62.2,2.5,NA,NA,NA
+"183","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"184","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"185","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"186","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"187","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"188","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"189","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"190","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"191","Servaltine genet","Felidae",92,18,14,31.5,NA
+"192","Servaltine genet","Felidae",92,18,14,31.5,NA
+"193","Servaltine genet","Felidae",92,18,14,31.5,NA
+"194","Servaltine genet","Felidae",92,18,14,31.5,NA
+"195","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"196","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"197","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"198","Servaltine genet","Viverridae",51,3,9.8,NA,NA
+"199","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"200","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"201","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"202","Servaltine genet","Felidae",82,12.5,14,19.8,65
+"203","Servaltine genet","Felidae",92,18,14,31.5,NA
+"204","Servaltine genet","Felidae",92,18,14,31.5,NA
+"205","Servaltine genet","Felidae",92,18,14,31.5,NA
+"206","Servaltine genet","Felidae",92,18,14,31.5,NA
+"207","Giant genet","Viverridae",60,3.5,12.1,NA,NA
+"208","Small spotted genet","Viverridae",52,2.3,9.2,11.9,0.98
+"209","Small spotted genet","Viverridae",52,2.6,9.2,11.9,0.98
+"210","Miombo genet","Viverridae",48,2.5,9.4,NA,NA
+"211","Johnsons genet","Viverridae",51.4,2.6,10,NA,NA
+"212","Aquatic genet","Viverridae",49.5,1.5,11.4,NA,NA
+"213","Rusty spotted genet","Viverridae",52.1,2.5,9.1,2.8,NA
+"214","Rusty spotted genet","Viverridae",52.1,3.2,9.1,5.9,NA
+"215","Cape genet","Viverridae",56,1.9,9.3,NA,NA
+"216","Cape genet","Viverridae",56,2.1,9.3,NA,NA
+"217","King genet","Viverridae",60,2.5,10,NA,NA
+"218","Pardine genet","Viverridae",55.3,3.1,10.1,NA,NA
+"219","Bourlons genet","Viverridae",49.5,2,10.8,NA,NA
+"220","Leightons oyan","Viverridae",38,0.7,NA,NA,NA
+"221","Central african oyan","Viverridae",40,0.5,7.3,NA,NA
+"222","Central african oyan","Viverridae",40,0.75,7.3,NA,NA
+"223","African palm civet","Nandiniidae",62.5,3,11.1,0.7,3.3
+"224","African palm civet","Nandiniidae",62.5,3,11.1,1.53,3.3
+"225","African palm civet","Nandiniidae",62.5,3,11.1,0.7,8
+"226","African palm civet","Nandiniidae",62.5,3,11.1,1.53,8
+"227","African Wild Dog","Canidae",112,36,24,2460,0.005
+"228","African Wild Dog","Canidae",112,36,24,2460,0.0225
+"229","African Wild Dog","Canidae",112,36,24,2460,0.024
+"230","African Wild Dog","Canidae",112,36,24,2460,0.039
+"231","Ethiopian Wolf","Canidae",96,14.2,21,13.4,1.2
+"232","Ethiopian Wolf","Canidae",101.2,19.3,21,13.4,1.2
+"233","Dingo","Canidae",101,17,21,55,NA
+"234","Dingo","Canidae",101,17,21,126,NA
+"235","Dingo","Canidae",111,32,21,55,NA
+"236","Dingo","Canidae",111,32,21,126,NA
+"237","Grey Wolf","Canidae",117,55,29.4,4335,0.092
+"238","Grey Wolf","Canidae",130,79.4,29.4,4335,0.092
+"239","Dhole","Canidae",113,17,20,49.5,NA
+"240","Dhole","Canidae",113,17,20,83,NA
+"241","Dhole","Canidae",113,21,20,49.5,NA
+"242","Dhole","Canidae",113,21,20,83,NA
+"243","Coyote","Canidae",95,14.8,22,3,NA
+"244","Coyote","Canidae",95,14.8,22,61,NA
+"245","Coyote","Canidae",95,18.1,22,3,NA
+"246","Coyote","Canidae",95,18.1,22,61,NA
+"247","Red Wolf","Canidae",120,30,26.1,225.8,NA
+"248","Red Wolf","Canidae",125,41,26.1,225.8,NA
+"249","Golden Jackel","Canidae",100,14.5,17.9,20,4
+"250","Golden Jackel","Canidae",105,15.5,17.9,20,4
+"251","Black backed Jackel","Canidae",85,10,17,24.9,1
+"252","Black backed Jackel","Canidae",90,11.1,17,24.9,1
+"253","Sidestriped Jackel","Canidae",76,10,17.3,1.6,NA
+"254","Sidestriped Jackel","Canidae",81,12,17.3,1.6,NA
+"255","Arctic Fox","Canidae",65,3.7,13.5,21,0.08
+"256","Arctic Fox","Canidae",65,3.7,13.5,60,0.03
+"257","Arctic Fox","Canidae",75,6.7,13.5,21,0.08
+"258","Arctic Fox","Canidae",75,6.7,13.5,60,0.03
+"259","Red Fox","Canidae",68,7.5,15.7,50,30
+"260","Red Fox","Canidae",90,14,15.7,50,30
+"261","Kit Fox","Canidae",54,2.2,12,11.6,1.7
+"262","Kit Fox","Canidae",54,2.7,12,11.6,1.7
+"263","Swift Fox","Canidae",54,2.3,12,25.1,NA
+"264","Swift Fox","Canidae",54,2.95,12,25.1,NA
+"265","Indian Fox","Canidae",48,2.9,12.5,1.6,1.5
+"266","Indian Fox","Canidae",57.5,3.6,12.5,3.1,1.5
+"267","Corsac Fox","Canidae",50,2.4,11.8,40,NA
+"268","Corsac Fox","Canidae",59.5,3.2,11.8,40,NA
+"269","Blanfords Fox","Canidae",45,1.6,9.9,2,2
+"270","Blanfords Fox","Canidae",47,1.6,9.9,2,2
+"271","Pale Fox","Canidae",55,3.6,10,NA,NA
+"272","Tibetan Fox","Canidae",70,4.1,15.8,NA,NA
+"273","Tibetan Fox","Canidae",70,5.7,15.8,NA,NA
+"274","Fennec Fox","Canidae",39.5,1.9,8.8,NA,NA
+"275","Cape Fox","Canidae",61,3.3,11.5,32.1,0.3
+"276","Bat-eared Fox","Canidae",60.7,5.4,12.5,8,9.2
+"277","Bat-eared Fox","Canidae",60.7,5.4,12.5,8,14
+"278","Island Fox","Canidae",63.4,2.7,11,0.87,NA
+"279","Gray Fox","Canidae",58,3.9,13.2,27.6,1.5
+"280","Gray Fox","Canidae",66,7,13.2,27.6,1.5
+"281","Raccoon Dog","Canidae",70.5,12.5,12.7,20,NA
+"282","Chilla","Canidae",66,5,14,2.8,NA
+"283","Darwins Fox","Canidae",59.1,3.7,NA,3,1.14
+"284","Darwins Fox","Canidae",59.1,4,NA,3,1.14
+"285","Sechuran Fox","Canidae",78,4.2,13,NA,NA
+"286","Culpeo","Canidae",92.5,10,18.8,8.9,NA
+"287","Culpeo","Canidae",92.5,13.8,18.8,8.9,NA
+"288","Hoary Fox","Canidae",71,4,11.8,4.6,NA
+"289","Pampas Fox","Canidae",72,5.7,15.4,1.8,5.85
+"290","Pampas Fox","Canidae",74,8,15.4,1.8,5.85
+"291","Crab eating Fox","Canidae",77.5,8.5,13.8,10.4,4
+"292","Shorteared Fox","Canidae",100,10,17.2,NA,NA
+"293","Bush Dog","Canidae",75,8,13,145,NA
+"294","Maned Wolf","Canidae",115,30,23.5,114.3,0.052
+"295","Pygmy raccoon","Procyonidae",43,4.1,NA,0.7,NA
+"296","Northern raccoon","Procyonidae",62,11,13.6,0.8,111
+"297","Northern raccoon","Procyonidae",62,11,13.6,3,27
+"298","Northern raccoon","Procyonidae",62,11,13.6,25.6,6
+"299","Crab eating raccoon","Procyonidae",76,7.7,14.3,NA,6.7
+"300","Mountain coati","Procyonidae",54,1.5,11.5,0.11,NA
+"301","South american coati","Procyonidae",59,7.2,12.5,54.4,13
+"302","South american coati","Procyonidae",59,7.2,12.5,9.6,13
+"303","White nosed coati","Procyonidae",68,5.6,13.8,0.41,70
+"304","White nosed coati","Procyonidae",68,5.6,13.8,22.4,1.7
+"305","White nosed coati","Procyonidae",68,5.6,13.8,0.54,70
+"306","White nosed coati","Procyonidae",68,5.6,13.8,10.7,1.7
+"307","Ringtail","Procyonidae",42,1.1,8.3,2.3,4
+"308","Ringtail","Procyonidae",42,1.1,8.3,2.3,20
+"309","Cacomistle","Procyonidae",47,1.2,9.1,0.23,NA
+"310","Olingos","Procyonidae",40,1.1,NA,NA,NA
+"311","Olingos","Procyonidae",37,1.2,NA,0.24,NA
+"312","Olingos","Procyonidae",49,1.6,8.5,NA,NA
+"313","Olingos","Procyonidae",49,1.6,NA,NA,20.4
+"314","Kinkajou","Procyonidae",76,4.6,10,0.5,30
+"315","Red Panda","Ailuridae",73,6,12.4,9.6,NA
+"316","Humboldts hog nosed skunk","Mephitidae",32,2.5,7,0.16,NA
+"317","Striped hog nose skunk","Mephitidae",50,3.5,8.5,0.53,12
+"318","Striped skunk","Mephitidae",40,3.6,8.8,12,38
+"319","Striped skunk","Mephitidae",40,5.5,8.8,12,38
+"320","American hog nosed skunk","Mephitidae",51,4.5,8.5,NA,1.3
+"321","Hooded skunk","Mephitidae",36,1.2,7.3,5,4
+"322","Hooded skunk","Mephitidae",36,2.7,7.3,5,4
+"323","Southern spotted skunk","Mephitidae",25,0.54,NA,NA,NA
+"324","Eastern spotted skunk","Mephitidae",33,0.48,6.4,1.9,40
+"325","Eastern spotted skunk","Mephitidae",33,0.9,6.4,4,40
+"326","Western spotted skunk","Mephitidae",37,0.57,6.4,0.31,19
+"327","Western spotted skunk","Mephitidae",37,1,6.4,0.47,19
+"328","Pygmy spotted skunk","Mephitidae",21,0.17,5,0.2,NA
+"329","Pygmy spotted skunk","Mephitidae",21,0.23,5,0.2,NA
+"330","Palawan stink badger","Mephitidae",49,2.5,7,NA,NA
+"331","Sunda stink badger","Mephitidae",51,3.6,10.4,NA,NA
+"332","North American Otter","Mustelidae",73,15.5,13,30.4,NA
+"333","North American Otter","Mustelidae",73,15.5,13,231,NA
+"334","Sea otter","Mustelidae",120,32.7,14.9,6.8,NA
+"335","Sea otter","Mustelidae",120,45,14.9,4.8,NA
+"336","Marine otter","Mustelidae",79,5.8,11.2,4.1,NA
+"337","Southern River Otter","Mustelidae",80,14.5,11.8,22.3,0.73
+"338","Neotropical otter","Mustelidae",66,12,12,NA,2.8
+"339","Giant otter","Mustelidae",130,26,17.5,32,NA
+"340","Giant otter","Mustelidae",130,34,17.5,32,NA
+"341","Eurasian Otter","Mustelidae",70,12,13,18.7,0.35
+"342","Eurasian Otter","Mustelidae",90,17,13,38.8,0.35
+"343","Asian Small Clawed Otter","Mustelidae",47,3.8,9.5,NA,NA
+"344","Hairy nosed otter","Mustelidae",82.6,8,12,NA,NA
+"345","Smooth coated otter","Mustelidae",75,11,13.2,12,1.3
+"346","Spotted neck otter","Mustelidae",76,4.7,11.2,5.8,NA
+"347","Spotted neck otter","Mustelidae",76,6,11.2,16.2,NA
+"348","Cape clawless otter","Mustelidae",73.6,16.3,14.5,17,1.4
+"349","Cape clawless otter","Mustelidae",88,21,14.5,42,1.4
+"350","Congo clawless otter","Mustelidae",97,25,14.5,NA,NA
+"351","Small toothed ferret badger","Mustelidae",42,1.6,8.3,4.7,NA
+"352","Large toothed ferret badger","Mustelidae",43,3,8.9,NA,NA
+"353","Bornean ferret badger","Mustelidae",45,2,NA,NA,NA
+"354","Javan ferret badger","Mustelidae",40,2,8.5,NA,NA
+"355","Sumatran hog badger","Mustelidae",71,8,13.3,NA,NA
+"356","Northern hog badger","Mustelidae",70,10,15.1,NA,NA
+"357","Greater hog badger","Mustelidae",104,15,17.7,NA,NA
+"358","American badger","Mustelidae",72,12,13.2,5.8,5
+"359","American badger","Mustelidae",72,12,13.2,44,5
+"360","American badger","Mustelidae",72,12,13.2,87.3,0.004
+"361","American badger","Mustelidae",72,12,13.2,450,0.004
+"362","Honey badger","Mustelidae",96,13.6,15.6,194,NA
+"363","Honey badger","Mustelidae",96,14.5,15.6,776,NA
+"364","Wolverine","Mustelidae",105,14.8,17.5,560,0.0153
+"365","Wolverine","Mustelidae",105,14.8,17.5,232,0.0153
+"366","Wolverine","Mustelidae",105,14.8,17.5,692,0.0153
+"367","Wolverine","Mustelidae",105,18.2,17.5,1131,0.0153
+"368","Wolverine","Mustelidae",105,18.2,17.5,917,0.0153
+"369","Wolverine","Mustelidae",105,18.2,17.5,2127,0.0153
+"370","Lesser grison","Mustelidae",52,2.5,9,NA,NA
+"371","Greater grison","Mustelidae",60,4,10.8,4.15,NA
+"372","Tayra","Mustelidae",71.2,7,12.5,16,NA
+"373","Striped weasel","Mustelidae",35,0.29,5.7,NA,NA
+"374","Striped weasel","Mustelidae",33,0.38,5.7,NA,NA
+"375","Libyan wesel","Mustelidae",26,0.6,6,NA,NA
+"376","Zorilla","Mustelidae",38,1.4,6.8,NA,NA
+"377","Zorilla","Mustelidae",38,1.5,6.8,NA,NA
+"378","Marbled polecat","Mustelidae",47.7,0.72,5.6,0.6,NA
+"379","Yellow throated marten","Mustelidae",65,3,11.1,11.8,NA
+"380","Nilgiri marten","Mustelidae",70,3,NA,NA,NA
+"381","Stone marten","Mustelidae",54,2.3,8.7,8.8,NA
+"382","Pine marten","Mustelidae",58,1.8,8.8,9.8,NA
+"383","Pine marten","Mustelidae",58,1.8,8.8,28.6,NA
+"384","Japanese martin","Mustelidae",54.5,1.7,8.5,1,NA
+"385","Fisher","Mustelidae",65,3.2,13.5,29.9,0.327
+"386","Fisher","Mustelidae",65,5.5,13.5,38.7,0.327
+"387","Sable","Mustelidae",56,1.6,9.5,7.2,NA
+"388","Sable","Mustelidae",56,1.8,9.5,13.1,NA
+"389","American marten","Mustelidae",40,0.85,8.8,27.6,1.5
+"390","American marten","Mustelidae",45,1.3,8.8,45,1.5
+"391","Black footed ferret","Mustelidae",50,0.85,7,1.88,NA
+"392","Black footed ferret","Mustelidae",50,1.1,7,1.32,NA
+"393","Siberian weasel","Mustelidae",30.5,0.45,6.7,0.017,NA
+"394","Siberian weasel","Mustelidae",39,0.82,6.7,0.044,NA
+"395","Steppe polecat","Mustelidae",56.2,0.8,7.5,1.27,NA
+"396","Steppe polecat","Mustelidae",56.2,1.2,7.5,3.54,NA
+"397","European mink","Mustelidae",40,0.6,6.7,5.1,12
+"398","European mink","Mustelidae",43,1.1,6.7,11.4,12
+"399","American mink","Mustelidae",40,1.1,7.1,4.2,5.4
+"400","American mink","Mustelidae",40,1.1,7.1,4.2,42
+"401","American mink","Mustelidae",43,2.3,7.1,11.1,5.4
+"402","American mink","Mustelidae",43,2.3,7.1,11.1,42
+"403","European Polecat","Mustelidae",38.5,0.92,7,1.65,NA
+"404","European Polecat","Mustelidae",38.5,0.92,7,1.21,NA
+"405","European Polecat","Mustelidae",46,1.7,7,3.05,NA
+"406","European Polecat","Mustelidae",46,1.7,7,2.8,NA
+"407","Least weasel","Mustelidae",26,0.3,3.5,0.07,13
+"408","Least weasel","Mustelidae",26,0.3,3.5,0.26,13
+"409","Stoat","Mustelidae",34,0.37,4.6,1.35,10
+"410","Stoat","Mustelidae",34,0.37,4.6,3.13,10
+"411","Altai weasel","Mustelidae",28.7,0.22,5.3,NA,NA
+"412","Altai weasel","Mustelidae",28.7,0.35,5.3,NA,NA
+"413","Colombian weasel","Mustelidae",22.5,0.15,4.5,NA,NA
+"414","Long tailed weasel","Mustelidae",22.8,0.25,5.6,0.52,0.8
+"415","Long tailed weasel","Mustelidae",22.8,0.25,5.6,0.52,38
+"416","Long tailed weasel","Mustelidae",26,0.45,5.6,1.8,0.8
+"417","Long tailed weasel","Mustelidae",26,0.45,5.6,1.8,38
+"418","Amazon weasel","Mustelidae",38,0.3,5,NA,NA
+"419","Yellow bellied weasel","Mustelidae",29,0.3,5,NA,NA
+"420","Stripe backed weasel","Mustelidae",32.5,2,6.6,NA,NA
+"421","Malay weasel","Mustelidae",36,1,5.3,NA,NA
+"422","Indonesian mountain weasel","Mustelidae",32.1,0.34,5,NA,NA

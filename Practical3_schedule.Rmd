@@ -1,0 +1,398 @@
+---
+title: 'Practical 3: Multiple explanatory variables'
+author: "NES2505"
+output:
+  html_document:
+    df_print: paged
+    number_sections: true
+  word_document:
+    number_sections: true
+---
+
+<style type="text/css">
+span.boxed {
+  border:5px solid gray;
+  border-radius:10px;
+  padding: 5px;
+}
+span.invboxed {
+  border:5px solid gray;
+  padding: 5px;
+  border-radius:10px;
+  color: white;
+}
+table, td, th
+{
+border:0px;
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+library(mosaic)
+library(car)
+#library(kableExtra)
+knitr::opts_chunk$set(echo = TRUE)
+peas_dat <- read.csv("Data/peas_block.csv")
+```
+
+# Introduction
+Now that we have developed a good understanding of linear models we are going to look at some more complex cases. The overall aim is to ensure that you are familiar with the use of linear models and the `lm()` function when you have multiple explanatory variables. These might be all continuous, all categorical, or a mixture of the two. Multiple explanatory variables can also arise in curve-fitting. You will also have the opportunity to gain more confidence and expertise in manipulating and plotting your data. Specific objectives are to:
+
+1. Two categorical explanatories, with a significant interaction terms, and how to interpret them
+2. One categorical and one continuous explanatory, with non-significant interaction term.
+3. Fitting curves to your data with `lm()`
+4. Demonstrate how to manage unbalanced designs
+5. Allow you to explore some of these ideas with new datasets (optional)
+
+# Packages and data sets
+
+Within this practical we are going to be using three data sets:
+
+* calcium levels in the blood of rabbits and whether these are influenced by the location and sex of the rabbit.
+* carbon stable isotope values (d13C) in the deep-sea fish _Antimora rostrata_ from the mid-Atlantic Ridge and whether these are influenced by fish length or location
+* whether the growth of the grass _Lolium perenne_ is related to soils of different water content
+
+We will be using the packages `mosaic` and `car`.
+
+First, thing to do is load your packages and read in your data to RStudio.
+
+# Multiple explanatory variables with interaction terms
+## What are interaction terms?
+Interaction terms can be useful in both designed experiments and field surveys. They provide a way of checking whether the effects of two explanatory variables on the response are independent of each other, or alternatively whether the value of one explanatory variable alters what the other one does.
+
+## Basic concepts in the 'goal-oriented' approach
+Our original linear model, with two explanatory variables is:
+
+&nbsp;
+
+<center>
+<h2><strong><span class="boxed">lm</span> ( <span class="boxed">y</span> ~ <span class="boxed">x1</span> + <span class="boxed">x2</span> , data = <span class="boxed">mydata</span>)</strong> 
+</h2></center>
+
+&nbsp;
+
+which can be thought of as:
+
+$$Response = \textit{Explanatory 1} + \textit{Explanatory 2} + \epsilon$$
+
+When we have an interaction term, our model changes to:
+
+&nbsp;
+
+<center>
+<h2><strong><span class="boxed">lm</span> ( <span class="boxed">y</span> ~ <span class="boxed">x1</span> + <span class="boxed">x2</span> + <span class="boxed">interaction x1:x2</span>, data = <span class="boxed">mydata</span>)</strong> 
+</h2></center>
+
+&nbsp;
+
+and we revise this to:
+
+$$Response = \textit{Explanatory 1} + \textit{Explanatory 2} + \textit{Interaction} + \epsilon$$
+ 
+where:
+
+* $Response$ = dependent variable, e.g. crop growth as a result of fertiliser
+* $\textit{Explanatory 1}$ = your first treatment, e.g. fertiliser (control, nitrogen, phosphorous)
+* $\textit{Explanatory 2}$ = your second treatment, e.g. pesticide (control, insecticide)
+* $\textit{Interaction}$ = measures how response variable changes as a result of **both** first and second treatment
+* $\epsilon$ = Greek letter epsilon = the unexplained "noise" in your data
+ 
+The $\textit{Explanatory 1}$ and $\textit{Explanatory 2}$ variables can be continuous and/or categorical. You can express an interaction term in R using the `lm()` function, by adding an extra term with the two explanatories separated by a colon `:` symbol.
+
+Let's look at the example from the [Interactive Website on interaction terms](https://naturalandenvironmentalscience.shinyapps.io/multiple_explan/#section-interactions-between-explanatory-variables)
+
+## Example of interactions: blood plasma calcium in rabbits
+Let's look at the example of the blood Ca level in rabbits, half from a lowland agricultural farm, half from an upland farm, split according to gender. So we have two categorical explanatory variables in this example. Download the file `plasma.csv` from Canvas and import the file into an R table called `plasma_dat`. Now see if you can produce a boxplot similar to the following. **Hints**:
+
+* `gf_boxplot()` is main function
+* `gf_labs()` to change default labels
+* `gf_refine()` to change overall format of plot
+
+```{r, echo=FALSE}
+plasma_dat <- read.csv("Data/plasma.csv")
+gf_boxplot(calcium ~ site, colour = ~sex, data=plasma_dat) %>% 
+  gf_labs(y = "Blood calcium (mg / 100 ml)", x = "Farm location") %>% 
+  gf_refine(theme_classic())
+```
+
+ From the plot you can see several trends:
+ 
+ * males seem to have lower blood Ca than females overall
+ * in males the blood Ca increases from lowland to upland, whereas for females it decreases
+ * the differences between males and females appear to be bigger at lowland than upland farms
+ 
+ You can now create the linear model using `lm()` as usual, but include an interaction term:
+ 
+```{r, eval=TRUE, echo=FALSE}
+calcium_lm <- lm(calcium ~ site + sex + site:sex, data=plasma_dat)
+print(Anova(calcium_lm))
+```
+```{r, eval=FALSE, echo=TRUE}
+calcium_lm <- lm(calcium ~ site + sex + site:sex, data=plasma_dat)
+Anova(calcium_lm)
+```
+
+Notice how your ANOVA table now has **three** rows for the explanatories, namely `site` on the first row, `sex` on the second row, and the interaction term `site:sex` on the third row. When `site` and `sex` are on their own, as on the first and second row, they are referred to as **"main effects"** to distinguish them from when they both occur together in the third row as the **interaction term**. As usual there is of course a final row for the `Residuals` or unexplained noise ($\epsilon$) in your data. You can see three F-ratios (one for each explanatory variable) and associated p-values, the latter under the column headed `Pr(>F)`.
+
+Before reading on, think about these questions:
+
+* How would you report the above F and p-values in a report?
+* Which explanatory variables are "statistically significant"?
+
+## How to interpret a linear model with interaction terms
+When you have an interaction term as one of your explanatory variables, always look at it **first**. If it is not significant, you might be able to manage with a simpler linear model that does not include interaction terms. It is always best to try and have a simpler rather than overly complex linear model when possible.
+
+However, in this example the interaction term **is** significant. Indeed, you have:
+
+* `site` main effect. $F_{1,16}=0.017, p=0.899$ non-significant
+* `sex` main effect. $F_{1,16}=167.658, p<0.001$
+* `site:sex` interaction. $F_{1,16}=47.604, p<0.001$
+
+So you can see that the `site:sex` interaction which indicates that `site` and `sex` are not independent of each other in their effects on blood calcium. You can also see that the `sex` main effect term is highly significant, whereas the `site` main effect is non-significant. This type of result is not uncommon, but at first glance is very confusing. Why is the `site` main effect unimportant, whilst it seems to have a big impact on blood calcium in the interaction? This seems a little contradictory.
+
+The easiest way to understand the process is to plot individual graphs for each component. See if you can create these graphs on your own.
+
+First of all the `site` main effect:
+
+```{r, echo=FALSE}
+gf_boxplot(calcium ~ site, data=plasma_dat)
+
+```
+
+It is fairly obvious that **if we ignore sex** the overall amounts of blood calcium are fairly similar in both the lowland and upland farms although the range of values is smaller in the uplands. A boxplot shows the median as the middle horizontal line (try calculating the means for comparison) and these are quite close to each other. This explains the non-significant `site` main effect.
+
+Second, the `sex` main effect, **if we ignore site**. Produce a graph similar to the following:
+
+```{r, echo=FALSE}
+gf_boxplot(calcium ~ sex, data=plasma_dat)
+```
+
+Now the sets of values are very different, with the males much lower overall than the females, which explains the large F-ratio and highly significant (p<0.001) results for `sex` main effect.
+
+Finally, the interaction term. As this graph is a little trickier to draw, I have included the R code. We include both the raw data, and lines connecting the means, to show the direction of change:
+
+```{r warning=FALSE, message=FALSE}
+# gf_point() adds the raw data points
+# gf_line() adds lines. We use stat="summary" to indicate the mean
+gf_point(calcium ~ site, colour= ~sex, data=plasma_dat) %>%
+  gf_line(calcium ~ site, colour= ~sex, group= ~sex, stat="summary", data=plasma_dat)
+```
+
+The important point to note here is that **the lines are not parallel**. If the lines were parallel, either upwards or downwards, it would indicate that the blood calcium changed in a similar way for both genders when moving from lowland to upland farms. However in reality they are not parallel, indeed the differences are so big that the gradients of the lines go in opposite directions. This indicates that the physiology of male and female rabbits in response to the elevation change is not the same. When you look at plots like this:
+
+* lines not parallel (as here): interaction is probably significant
+* lines parallel (not in this example): interaction probably non-significant
+
+To explore these data more [look at this interactive webpage](https://naturalandenvironmentalscience.shinyapps.io/multiple_explan/#section-interactive-demonstration). This uses the same data, but you can randomly adjust some of the terms, and see how the results change. Begin by setting the interaction term to zero, and notice the difference.
+
+We still need to check whether the assumptions of the test have been met. These can be done as we did with the linear models with continuous or categorical variables using a qq-plot and boxplot like last week.
+
+```{r warning=FALSE, message=FALSE}
+# check the qqplot
+calcium_lm_resid <- residuals(calcium_lm)
+gf_qq(~calcium_lm_resid) %>%
+  gf_qqline()
+```
+
+What do you think about the qq-plot? Do you think that the assumption of normality has been met?
+
+We also need to check for homogeneity of variance but this time we need to check it for both the main effects: sex and site.
+
+```{r warning=FALSE, message=FALSE}
+# check the residual homogeneity of variance for sex
+gf_boxplot(calcium_lm_resid ~ plasma_dat$sex) %>%
+  gf_hline(colour = "red", linetype = "dashed", yintercept = 0) %>% 
+  gf_theme(theme_classic())
+
+# check the residual homogeneity of variance for site
+gf_boxplot(calcium_lm_resid ~ plasma_dat$site) %>%
+  gf_hline(colour = "red", linetype = "dashed", yintercept = 0) %>% 
+  gf_theme(theme_classic())
+```
+
+What do you think of the boxplots? Are you happy with spread around zero? Is there more variability in one of the main effects?
+
+# Multiple explanatories - second example
+In our second example we have one continuous explanatory, and one categorical explanatory. You will often see this type of analysis described as an ANCOVA or Analysis of Covariance. Here we look at the biochemical tissue composition (`d13C`) of fish. The categorical explanatory is the site (NW or SE) stored in `area`, and the continuous explanatory is fish length, stored in the column `standard_length`. The data are on Canvas in the file `anr_ancova.csv`. Download them into the appropriate folder, and import them into R into a `data.frame` called `anr` and run `summary(anr)` and `View(anr)` to check that it has been imported correctly.
+
+```{r echo=FALSE}
+anr <- read.csv("Data/anr_ancova.csv")
+```
+
+## Plot your data
+Begin by plotting your fish data, with the area on the x-axis and biochemical composition on the y-axis. As you have two areas, you want to colour your points in accornding to the SE or NW locations, as well as add fitted lines:
+
+```{r plot-anr, warning=FALSE}
+# plot data first
+gf_point(d13c ~ standard_length, col = ~area, data = anr) %>%
+  gf_lm(d13c ~ standard_length, col = ~area, interval = "confidence", data = anr) %>%
+  gf_labs(x = "Standard length (mm)", y = "d13c per mil") %>% 
+  gf_theme(theme_classic())
+```
+
+## Undertake analysis
+It is obvious that d13c increases with larger fish, and that concentrations appear to be higher in the SE than NW site. Are the lines parallel? Let's check with a linear model. One problem with having one continuous and one categorical explanatory variable is that the actual results from your `anova` function depend on the order in which you list the explanatory variables into the model. This can be resolved using the `Anova` function from the `car` library, which we will load first. 
+
+```{r, warning=FALSE, message=FALSE}
+anr_lm <- lm(d13c ~ standard_length + area + standard_length:area, data = anr)
+Anova(anr_lm)
+```
+
+You can see that the model shows highly significant effects from the area (SE or NW) and fish lengths with p<0.001 in both cases (remember the column headed `Pr(>F)` contains your p-values, and `e-15` indicates lots of zeros, so is a very low number). In contract the interaction term is non-significant with p=0.552. Let us therefore simplify the model and create one without the interaction term. Simpler models are better in general:
+
+```{r}
+anr_lm2 <- lm(d13c ~ standard_length + area, data = anr)
+Anova(anr_lm2)
+```
+
+This second model is the one to use. Remember: look at your interaction term first, and if it is non-significant then drop it from your linear model. If, as in the rabbit example, the interaction is significant then retain all your model explanatory variables. But what are the results of the analysis telling you. Discuss with your peers or talk it through with a demonstrator.
+
+It is still important to check the assumptions of the model. See if you can remember how to do this. If you feel that you want move on, please do and come back to this later.
+
+# Using linear models to fit curves
+How can a linear model fit a curve? The term "linear model" simply refers to the way in which the different explanatory variables are combined. They are all combined using simple addition symbols `+`, for example, your model:
+
+`anr_lm <- lm(d13c ~ standard_length + area + standard_length:area, data = anr)`
+
+from earlier has two `+` symbols on the right-hand side. By adjusting some terms in the explanatories you can fit curves (see below). In NES2505 we will only use linear and generalised linear models. We will not use non-linear models.
+
+## Data transformation or polynomials?
+It is much easier to fit a straight line than a curve, but often an initial exploration of your data by plotting it will reveal that a straight-line does not provide a satisfactory model. The two main approaches to resolve this are to:
+
+1. A simple mathematical transformation of your data to bring it back to a straight line. Commonly used transformations are logarithmic `log()` and square-root `sqrt()` of your response variable.
+2. Use a polynomial linear model, by adding extra explanatory variables calculated from the first explanatory variable. The explanatories thus become $x$, $x^2$, $x^3$ etc.
+
+The use of both methods is somewhat controversial. Mathematical transformations can make it harder to understand and interpret the results, especially if there is not an obvious biological basis for the transformation. High-order polynomial terms such as $x^3$ and $x^4$ will create attractive smooth curves, but have little biological meaning. Conversely, some mathematical transformations are so common you probably never even think about them: **pH** is actually the log-transformation of hydrogen ions; these have a skewed 'log-normal' distribution by default, so taking a logarithm to create the pH scale makes sense. You can also end up with skewed data when you have counts of a response variable, since you cannot have negative counts. It used to be common to log-transform count data using `log(y+1)` (in case there are any zeros). Here we will focus on a polynomial example to fit a curve.
+
+## Polynomial linear model: quadratic for simple curves
+The word "polynomial" simply indicates that we are going to derive new $x^2$ (x-squared), $x^3$ (x-cubed) etc. terms to put into our linear model in order to fit a curve. Due to problems of biological interpretation, it is very rare to go beyond a simple **quadratic** model:
+
+$$\textit{Response variable}=\textit{Explanatory variable}+\textit{Explanatory variable}^2 + \epsilon$$
+where
+
+* $\textit{Response variable}$ = dependent, y-axis variable
+* $\textit{Explanatory variable}$ and $\textit{Explanatory variable}^2$ = independent, x-axis variable, either in its original form, or squared.
+* $\epsilon$ = Greek letter epsilon for unknown noise or variation in your data.
+
+These are easy to create using the `lm()` function using:
+
+`lm(response ~ explanatory + I(explanatory^2), data=dataset_name)`
+
+The slightly confusing change to the usual syntax is that `^2` is used to indicate that we are going to add a squared explanatory, and we have to "wrap" the squared term in an extra set of brackets prefaced by `I()` to indicate that we "Intend" to do this, and it isn't a typing error.
+
+## _Lolium_ growth example
+Let us build on the example at the [Interactive Website on Curve fitting]() for growth of the grass _Lolium perenne_ in soils of different water content. You will need to first:
+
+* dowload the file `grass_growth.csv` from Canvas
+* copy `grass_growth.csv` into your `Data` folder
+* import it into R using `read.csv()` as a table called `lolium_dat`
+
+Use the `head()` function to look at the first few rows, or double-click on `lolium_dat` in the "Environment" pane (top-right of RStudio) to view the whole table of data. Next, produce a scatterplot of the data:
+
+```{r, echo=FALSE}
+lolium_dat <- read.csv("Data/grass_growth.csv")
+```
+
+```{r, echo=TRUE}
+gf_point(growth ~ water, data=lolium_dat) %>% 
+  gf_labs(x = "Soil water content (%)", y="Growth rate") %>% 
+  gf_theme(theme_classic())
+```
+
+You can see that whilst the pattern of points is broadly increasing, but beyond about 75% soil water it starts to drop sharply. _Lolium_ is not an aquatic plant, so this makes sense biologically of course. 
+
+### Simple (straight line) linear model
+Let's look at a simple straight-line linear model to begin. This model is of the form:
+
+$growth = water + \epsilon$
+
+```{r, echo=TRUE}
+lolium_lm1 <- lm(growth ~ water, data = lolium_dat)
+summary(lolium_lm1)
+```
+
+So that was easy! You have a highly significant linear model, showing that _Lolium_ growth increases with water content. The overall model is significant with $F_{1,17}=11.45, p=0.004$, and the $R^2=0.367$ (model explains 36.7% of variation). But... we should always check model assumptions by looking at the residuals to see if there are any abnormalities.
+
+### Diagnostics for simple (straight line) linear model
+We can actually produce 4 "diagnostic" plots quite easily with the `plot()` function, writing `plot(lolium_lm1)`. Only the first two are really useful here. The `plot()` function extracts the residuals and creates a QQ plot automatically. All the plots look at "Residuals". Remember residuals are the differences between your fitted straight line and the observed points.
+
+```{r, echo=TRUE, eval=TRUE}
+plot(lolium_lm1, which=1:2) # We only want the first two diagnostic plots
+```
+
+* The first plot is called **Residuals vs Fitted**. Notice how it bends down at both low and high fitted values, with the residuals drifting away from zero, whereas ideally the scatter around should be fairly constant.
+* The second plot, titled **Normal Q-Q** is the quantile-quantile plot you have created manually before. Notice how poorly the points align with the expected dotted line, especially at the extremes.
+
+### Add the fitted line to see the problem
+If you modify your plot, by adding a line via the `gf_lm()` function, the problem is obvious:
+
+```{r, echo=TRUE}
+gf_point(growth ~ water, data=lolium_dat) %>% 
+  gf_labs(x = "Soil water content (%)", y="Growth rate") %>% 
+  gf_lm() %>% 
+  gf_theme(theme_classic())
+```
+
+Thus, by looking at the raw data, especially when you overlay the fitted line, as well as the diagnostic residual plots from the model, as well as basic plant biology, you can see this is not a good model. Let's change it to a curve, by changing it to a quadratic.
+
+### Quadratic (curve) linear model
+This means our model is now of the form:
+
+$growth = water + water^2 + \epsilon$
+
+which we can express in R as:
+
+```{r, echo=TRUE}
+lolium_lm2 <- lm(growth ~ water + I(water^2), data = lolium_dat)
+summary(lolium_lm2)
+```
+
+This linear model is also significant. You will notice that the overall model is highly significant with $F_{2,16}=64.37,p<0.001$ and $R^2=0.876$, or 87.6% explained. **Note** In the previous sentence the p-value is written as $p<0.001$ which indicates "p is less than 0.001". This is because in the overall linear model output it the p-value is shown as `p-value: 2.23e-08` which is the same as $p=0.0000000223$. The convention is that for tiny p-values, the actual amount is not shown, and instead the "less than 0.001" syntax is used.
+
+Is the improvement in the overall model of `lolium_lm2` compared to the earlier `lolium_lm1` significant? We can compare the two models using `anova()`:
+
+```{r, eval=FALSE, echo=TRUE}
+anova(lolium_lm1, lolium_lm2)
+```
+```{r, eval=TRUE, echo=FALSE}
+print(anova(lolium_lm1, lolium_lm2))
+```
+
+
+This is a test to compare our two linear models, and it gives $F_{2,16}=70.48, p<0.001$ indicating that there is a big difference in the performance of our two models, with our second one, labelled `Model 2` in the above output, better. Notice also the column headed `RSS` which stands for "Residual Sum of Squares". This is a measure of the "noise" that is not explained by our model. You can see that it is much smaller at 146.81 for the second model.
+
+### Coefficients from quadratic model `lolium_lm2`
+Look at the column headed `Estimate` in the `summary(lolium_lm2)` above. All three estimates, the `(Intercept)`, the `water` and quadratic `I(water^2)` terms are significant, but their values are very different, at 10.716, 1.067 and -0.009 respectively. It is common for the absolute value of the squared term to be very small. **Questions**:
+
+* Why is the value of the estimate for the squared term so small? Why might this be? 
+* Why does the squared term have a negative value?
+* How does the value of `water^2` change as you square the value of water?
+
+Ask on Microsoft Teams if unsure, under the "Section 3 - Dealing with multiple explanatories" channel.
+
+### Diagnostics and plots from quadratic model `lolium_lm2`
+Replot the first two diagnostic from `lolium_lm2` and you can see that both of these are improved compared to the original.
+
+```{r, echo=FALSE}
+plot(lolium_lm2, which=1:2)
+```
+
+Finally, let's plot the raw data, plus our quadratic model with confidence intervals. By default, the `gf_lm()` function adds a straight line, but if we give it the same quadratic we used in the model, it will add a curve.
+
+```{r}
+gf_point(growth ~ water, data = lolium_dat) %>% 
+  gf_lm(formula = y ~ x + I(x^2), interval = "confidence")
+```
+
+This looks much better and more realistic. It is a better statistical model, and also makes more biological sense. Before you go further, try modifying this plot so that the horizontal axis is labelled "Soil water %" and the vertical axis "Growth rate".
+
+# Take home messages from today's practical
+These are the key things you should have learnt:
+
+1. How to measure whether two (or more) explanatory variables are independent in their effects via interaction terms
+2. How to fit curves using a quadratic model
+3. You can use categorical and continuous explanatory variables in a linear model.
+
+If you have any questions about these topics, remember to speak to demonstrator or pop them into Microsoft Teams.
