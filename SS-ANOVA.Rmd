@@ -27,41 +27,9 @@ knitr::opts_chunk$set(echo = FALSE)
 ### Introduction
 You have already used the `Anova` command when you looked at the outputs from
 some of your earlier linear models. It can be used on linear models where the
-explanatory variable(s) are categorical or continuous, and can even be used to
-compare different linear models.  So, for example, you might have R code such
-as:
+explanatory variable(s) are categorical or continuous. We have used it to find the degrees of freedom, F-values and p-values. But it is important to think more about how ANOVA actually work.
 
-`bacteria_lm1 <- lm(bacteria_growth ~ antibiotic_concentration, data=bacteria)`
-
-where your response is the continuous variable `bacteria_growth`, and your
-explanatory variable is the continuous variable `antibiotic_concentration`.
-You might create a more complicated model, including incubation temperature as
-a continuous explanatory variable:
-
-`bacteria_lm2 <- lm(bacteria_growth ~ antibiotic_concentration + temperature, data=bacteria)`
-
-Which is the better linear model, `bacteria_lm1` or the more complex one
-`bacteria_lm2`. You can easily see if there is a statistically significant
-difference between the models using the `Anova` command:
-
-`Anova(bacteria_lm1, bacteria_lm2)`
-
-which will print out an ANOVA table and p-value.
-
-```{r which_lm}
-question("If you performed an Anova function on bacteria_lm1 and bacteria_lm2
-         and the p-value is greater than 0.05, which linear model is better for
-         your data?",
-         answer("bacteria_lm1", correct = TRUE, message = "Good. As there is
-                no statistically significant different, because p>0.05, you
-                should select the simpler linear model"),
-         answer("bacteria_lm2", message = "No. The p-value is greater than 0.05
-                which means that there is no significant difference in the
-                explanatory power of the two linear models. You should always
-                try and use the simpler of the models where possible"))
-```
-
-To refresh you memory of how R summarises the results of linear models, re-create
+To refresh your memory of how R summarises the results of linear models, re-create
 the caterpiller growth and crop linear models you have already used. Remember that
 
 * The `caterpillers` data.frame contains two columns `tannin` and `growth`
@@ -70,7 +38,7 @@ the caterpiller growth and crop linear models you have already used. Remember th
 Create the linear models again using `lm()` making sure you know which is your 
 response and explanatory variable in each case, use the `summary()` to show the
 detailed information about model parameters. To show the full output, we will
-use the "base" R command `anova()` rather than `Anova()` for the ANOVA tables.
+use the "base" R command `anova()` rather than `Anova()` from the `car` package for the ANOVA tables.
 The base R `anova()` command produces more complex output, but it will help you
 to understand how ANOVA works.
 
@@ -116,7 +84,7 @@ question("Why is there no column headed 'variance' in the ANOVA table?",
 
 So, now you can understand where the variances are, you might be wondering 
 **why do we test the importance of explanatory variables by their variances?** or 
-**How does ANOVA work**
+**How does ANOVA work**?
 
 We will show this interactively, with examples similar to your `caterpillers`
 and `crop_yield` datasets.
@@ -136,7 +104,7 @@ gf_point(growth ~ tannin, data=caterpillers) %>%
 ```
 
 Compare the intercept (where the fitted line crosses the vertical axis) and slope
-with the output from your earlier `summary()` function on this model. Note that
+with the output from your earlier `summary()` function of this model. Note that
 the slope is negative as the observations decline from left to right.
 
 ### How does `lm()` know where to put the fitted line?
@@ -258,7 +226,7 @@ output from your linear model:
 
 ```{r lm_caterpillers_reminder}
 caterpiller_lm <- lm(growth ~ tannin, data=caterpillers)
-Anova(caterpiller_lm)
+anova(caterpiller_lm)
 ```
 
 Look at the value headed F-value. This is 30.97. Can you see how it has been
@@ -368,7 +336,7 @@ the mean value of the tannin (4.00) and the mean value of the growth (6.89) as
 shown below. It then simply adjusts the slope to minimise the SS error, and hence
 the MS error.
 
-```{r lm_with_means_xy}
+```{r lm_with_means_xy, warning = FALSE}
 gf_point(growth ~ tannin, data=caterpillers) %>% 
   gf_lm(growth ~ tannin, data=caterpillers) %>% 
   gf_hline(yintercept = mean(caterpillers$growth), colour = "red", linetype = "dashed") %>% 

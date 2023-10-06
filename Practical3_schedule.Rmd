@@ -101,7 +101,7 @@ where:
  
 The $\textit{Explanatory 1}$ and $\textit{Explanatory 2}$ variables can be continuous and/or categorical. You can express an interaction term in R using the `lm()` function, by adding an extra term with the two explanatories separated by a colon `:` symbol.
 
-Let's look at the example from the [Interactive Website on interaction terms](https://naturalandenvironmentalscience.shinyapps.io/multiple_explan/#section-interactions-between-explanatory-variables)
+Let's look at the example from the [Interactive Website on interaction terms]()
 
 ## Example of interactions: blood plasma calcium in rabbits
 Let's look at the example of the blood Ca level in rabbits, half from a lowland agricultural farm, half from an upland farm, split according to gender. So we have two categorical explanatory variables in this example. Download the file `plasma.csv` from Canvas and import the file into an R table called `plasma_dat`. Now see if you can produce a boxplot similar to the following. **Hints**:
@@ -123,17 +123,12 @@ gf_boxplot(calcium ~ site, colour = ~sex, data=plasma_dat) %>%
  * in males the blood Ca increases from lowland to upland, whereas for females it decreases
  * the differences between males and females appear to be bigger at lowland than upland farms
  
- You can now create the linear model using `lm()` as usual, but include an interaction term:
+You can now create the linear model using `lm()` as usual, but include an interaction term. We will use the `car` package which you loaded at the start to get the ANOVA table using the `Anova` function. This will give use our degrees of freedom, F-value and p-value.
  
-```{r, eval=TRUE, echo=FALSE}
-calcium_lm <- lm(calcium ~ site + sex + site:sex, data=plasma_dat)
-print(Anova(calcium_lm))
-```
-```{r, eval=FALSE, echo=TRUE}
+```{r, eval=TRUE}
 calcium_lm <- lm(calcium ~ site + sex + site:sex, data=plasma_dat)
 Anova(calcium_lm)
 ```
-
 Notice how your ANOVA table now has **three** rows for the explanatories, namely `site` on the first row, `sex` on the second row, and the interaction term `site:sex` on the third row. When `site` and `sex` are on their own, as on the first and second row, they are referred to as **"main effects"** to distinguish them from when they both occur together in the third row as the **interaction term**. As usual there is of course a final row for the `Residuals` or unexplained noise ($\epsilon$) in your data. You can see three F-ratios (one for each explanatory variable) and associated p-values, the latter under the column headed `Pr(>F)`.
 
 Before reading on, think about these questions:
@@ -161,7 +156,9 @@ gf_boxplot(calcium ~ site, data=plasma_dat)
 
 ```
 
-It is fairly obvious that **if we ignore sex** the overall amounts of blood calcium are fairly similar in both the lowland and upland farms although the range of values is smaller in the uplands. A boxplot shows the median as the middle horizontal line (try calculating the means for comparison) and these are quite close to each other. This explains the non-significant `site` main effect.
+It is fairly obvious that **if we ignore sex** the overall amounts of blood calcium are fairly similar in both the lowland and upland farms although the range of values is smaller in the uplands. A boxplot shows the median as the middle horizontal line and these are quite close to each other. This explains the non-significant `site` main effect.
+
+How does the mean value compare to the median? See if you can calculate the mean for lowland and upland?
 
 Second, the `sex` main effect, **if we ignore site**. Produce a graph similar to the following:
 
@@ -185,9 +182,9 @@ The important point to note here is that **the lines are not parallel**. If the 
 * lines not parallel (as here): interaction is probably significant
 * lines parallel (not in this example): interaction probably non-significant
 
-To explore these data more [look at this interactive webpage](https://naturalandenvironmentalscience.shinyapps.io/multiple_explan/#section-interactive-demonstration). This uses the same data, but you can randomly adjust some of the terms, and see how the results change. Begin by setting the interaction term to zero, and notice the difference.
+To explore these data more [look at this interactive webpage](). This uses the same data, but you can randomly adjust some of the terms, and see how the results change. Begin by setting the interaction term to zero, and notice the difference.
 
-We still need to check whether the assumptions of the test have been met. These can be done as we did with the linear models with continuous or categorical variables using a qq-plot and boxplot like last week.
+We still need to check whether the assumptions of the test have been met (normality and homogeneity of variance). These can be done as we did with the linear models with continuous or categorical variables using a qq-plot and boxplot like last week. We will just look at the qq-plot to save time today but you would want to check for homogeneity of variance here as well.
 
 ```{r warning=FALSE, message=FALSE}
 # check the qqplot
@@ -198,22 +195,6 @@ gf_qq(~calcium_lm_resid) %>%
 
 What do you think about the qq-plot? Do you think that the assumption of normality has been met?
 
-We also need to check for homogeneity of variance but this time we need to check it for both the main effects: sex and site.
-
-```{r warning=FALSE, message=FALSE}
-# check the residual homogeneity of variance for sex
-gf_boxplot(calcium_lm_resid ~ plasma_dat$sex) %>%
-  gf_hline(colour = "red", linetype = "dashed", yintercept = 0) %>% 
-  gf_theme(theme_classic())
-
-# check the residual homogeneity of variance for site
-gf_boxplot(calcium_lm_resid ~ plasma_dat$site) %>%
-  gf_hline(colour = "red", linetype = "dashed", yintercept = 0) %>% 
-  gf_theme(theme_classic())
-```
-
-What do you think of the boxplots? Are you happy with spread around zero? Is there more variability in one of the main effects?
-
 # Multiple explanatories - second example
 In our second example we have one continuous explanatory, and one categorical explanatory. You will often see this type of analysis described as an ANCOVA or Analysis of Covariance. Here we look at the biochemical tissue composition (`d13C`) of fish. The categorical explanatory is the site (NW or SE) stored in `area`, and the continuous explanatory is fish length, stored in the column `standard_length`. The data are on Canvas in the file `anr_ancova.csv`. Download them into the appropriate folder, and import them into R into a `data.frame` called `anr` and run `summary(anr)` and `View(anr)` to check that it has been imported correctly.
 
@@ -222,34 +203,46 @@ anr <- read.csv("Data/anr_ancova.csv")
 ```
 
 ## Plot your data
-Begin by plotting your fish data, with the area on the x-axis and biochemical composition on the y-axis. As you have two areas, you want to colour your points in accornding to the SE or NW locations, as well as add fitted lines:
+Begin by plotting your fish data using a scatterplot, with the area on the x-axis and biochemical composition on the y-axis. As you have two areas, you want to colour your points according to the SE or NW locations, as well as add fitted lines to visualise the relationship. Edit the lines of code below to getting them working and to produce a similat figure to the one shown.
 
-```{r plot-anr, warning=FALSE}
+```{r plot-anr, echo = FALSE, warning=FALSE}
 # plot data first
-gf_point(d13c ~ standard_length, col = ~area, data = anr) %>%
-  gf_lm(d13c ~ standard_length, col = ~area, interval = "confidence", data = anr) %>%
+gf_point(d13c ~ standard_length, colour = ~area, data = anr) %>%
+  gf_lm(d13c ~ standard_length, colour = ~area, interval = "confidence", data = anr) %>%
   gf_labs(x = "Standard length (mm)", y = "d13c per mil") %>% 
   gf_theme(theme_classic())
 ```
 
-## Undertake analysis
-It is obvious that d13c increases with larger fish, and that concentrations appear to be higher in the SE than NW site. Are the lines parallel? Let's check with a linear model. One problem with having one continuous and one categorical explanatory variable is that the actual results from your `anova` function depend on the order in which you list the explanatory variables into the model. This can be resolved using the `Anova` function from the `car` library, which we will load first. 
+`# plot data first
+gf_point(d13c ~ stadnard_length, col = ~area, data = anr) %>%
+gf_lm(d13c ~ standard_length, col = area, data = anr) %>%
+gf_labs(x = "length", y = "d13c per mil")
+`
 
-```{r, warning=FALSE, message=FALSE}
+If you are unsure, look back at last weeks practical because some of the code is the same and check for spelling errors (`names(anr)` will give you the variables in the data frame).
+
+## Undertake analysis
+It is obvious that d13c increases with larger fish, and that concentrations appear to be higher in the SE than NW site. Are the lines parallel? Let's check with a linear model. Think about how you set-up your previous linear model with two categorical explanatory variables and an interaction term and see if you can write the new model from scratch. The two explanatory variables are `standard_length` and `area` while the response variable is `d13c`.  
+
+```{r, warning=FALSE, echo = FALSE, message=FALSE}
 anr_lm <- lm(d13c ~ standard_length + area + standard_length:area, data = anr)
 Anova(anr_lm)
 ```
 
-You can see that the model shows highly significant effects from the area (SE or NW) and fish lengths with p<0.001 in both cases (remember the column headed `Pr(>F)` contains your p-values, and `e-15` indicates lots of zeros, so is a very low number). In contract the interaction term is non-significant with p=0.552. Let us therefore simplify the model and create one without the interaction term. Simpler models are better in general:
+You can see that the model shows highly significant effects from the area (SE or NW) and fish lengths with p<0.001 in both cases (remember the column headed `Pr(>F)` contains your p-values, and `e-15` indicates lots of zeros, so is a very low number). In contract the interaction term is non-significant with p=0.552. Let us therefore simplify the model and create one without the interaction term. Simpler models are better in general. Remove the interaction term and rerun your analysis.
 
 ```{r}
 anr_lm2 <- lm(d13c ~ standard_length + area, data = anr)
 Anova(anr_lm2)
 ```
 
-This second model is the one to use. Remember: look at your interaction term first, and if it is non-significant then drop it from your linear model. If, as in the rabbit example, the interaction is significant then retain all your model explanatory variables. But what are the results of the analysis telling you. Discuss with your peers or talk it through with a demonstrator.
+This second model is the one to use. The ANOVA table gives us the F-value and p-value which we need to report but it would be useful to know the slope and the intercept for the relationship for the two fitted lines. It would be good to report the equations for each line. We can do this by using the `summary` function like last week.
 
-It is still important to check the assumptions of the model. See if you can remember how to do this. If you feel that you want move on, please do and come back to this later.
+```{r}
+summary(anr_lm2)
+```
+
+Looking at the summary output and the scatterplot you have produced which plotted the relationships between d13c and standard length for both areas, can you work what the intercepts are for each area and what the gradient of the slope is? 
 
 # Using linear models to fit curves
 How can a linear model fit a curve? The term "linear model" simply refers to the way in which the different explanatory variables are combined. They are all combined using simple addition symbols `+`, for example, your model:

@@ -1,0 +1,13 @@
+name: NES2505linearmodelSS
+title: NES2505linearmodelSS
+username: naturalandenvironmentalscience
+account: naturalandenvironmentalscience
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10112173
+bundleId: 7772263
+url: https://naturalandenvironmentalscience.shinyapps.io/NES2505linearmodelSS/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: expt_design.Rmd|multiple_explan.html|multiple_explan.Rmd|practical3_good.R|Practical3_schedule.html|Practical3_schedule.Rmd|multiple_explan_files

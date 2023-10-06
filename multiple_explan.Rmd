@@ -74,9 +74,9 @@ Anova(calcium_lm)
 
 You can see from the ANOVA table indicates that:
 
-* the `site` main effect is **not significant** as P=8.985896e-01 = 0.896. There is **no difference** in the average calcium at the upland and lowland sites
-* the `sex` main effect **is significant** as P=0.000000000678 < 0.001. There is **more calcium** in the blood of females than males
-* the `site:sex` term **is significant** as P=0.00000356 <0.001. The amount of calcium depends on **both site and gender**
+* the `site` main effect is **not significant** as P=8.985896e-01 = 0.896. There is **no difference** in the mean calcium levels at the upland and lowland sites
+* the `sex` main effect **is significant** as P=0.000000000678 is < 0.001. There is **more calcium** in the blood of females than males
+* the `site:sex` term **is significant** as P=0.00000356 is <0.001. The amount of calcium depends on **both site and gender**
 
 That last bullet point might seem confusing at first. If `site` on its own is
 not significant, how can the interaction `site:sex` be significant? Let's look
@@ -104,23 +104,17 @@ significant interaction term
 
 ### Should I drop the non-significant site main effect from the model?
 You might be wondering whether you should omit the `site` main effect and have a
-model that consists only of the `sex` main effext plus the `sex:site` interaction:
+model that consists only of the `sex` main effect plus the `sex:site` interaction:
 
-$$calcium = sex + site\ sex\ interaction + Error$$
-There is not a consensus amongst statisticians on this issue, but I would advise
-retaining it **if the interaction is significant**. If you want to simplify a
-model down to its simplest form, **always look at the interaction term first**.
+$$calcium = site + sex + site\ sex\ interaction + Error$$
+There is not a consensus amongst statisticians on this issue, but **if the interaction is significant** then is best to keep the main effect that is not significant. If you want to simplify a model down to its simplest form, **always look at the interaction term first**.
 If the interaction is non-significant, then you are justified in re-running the
-model without the interaction, and looking at the main effects. However, if the
-interaction is significant, I would recommend that you keep all the main effects,
-even ones, like `site`, that are non-significant.
+model without the interaction, and looking at the main effects. In this example, the
+interaction is significant so it is best to keep `site`and report that it is not significant. This is because there is something going between `sex` and `site` that is important biologically.
 
 ## Interactive demonstration
 ### Simulating main effects and interactions
-This interactive demonstration allows you to modify the relative importance of
-the two main effects from the rabbit example (sex and site) and the interaction
-term. Adjust the sliders to change the importance, and note the differences in
-the resulting graph, and ANOVA table from the linear model.
+We can think more about what happens when we have interaction between two of our explanatory variables using the following interactive demonstration. The interactive demonstration sliders allow you to modify the relative importance of the two main effects from the rabbit example (`sex` and `site`) and the interaction term. Adjust the sliders to change the importance, and note the differences in the resulting graph, and ANOVA table from the linear model.
 
 **Note**
 
@@ -218,7 +212,7 @@ be more difficult to interpret.
 
 ### Key points to note:
 
-* When there is no interaction the lines are roughly parallel
+* When there is no interaction (set to zero) the lines are roughly parallel
 * Try setting the interaction to zero and one of the main effects to zero.
 * Note how the bigger a main effect, the more the males/females separate, or
 the more the difference between uplands and lowlands
@@ -228,7 +222,7 @@ happening!!
 ## Continuous and categorical variables
 
 We can use continuous and categorical data in the same linear model to test whether a relationship between two continuous variables is different depending on different levels of a categorical variable. This type of linear model can help us compare the intercepts and slopes of two or more regression lines. This type of analysis is sometimes referred to as Analysis of Covariance (ANCOVA). You may find the categorical explanatory variable 
-refereed to as a factor and a continuous explanatory variable sometimes called a covariate. The combination of these two explanatory variables can include an interactions. A linear model with continuous and categorical explanatory variables still uses the `lm()` function. The analysis compares the difference in the means of two or more levels of the categorical explanatory variable whilst adjusting for the continuous explanatory covariate but only when the lines are parallel. The key concept here is that the analysis can test whether there are differences in the gradient of the relationship between response variables and the continuous explanatory variable for multiple levels of the categorical variable. 
+refereed to as a factor and a continuous explanatory variable is sometimes called a covariate. The combination of these two explanatory variables can include an interaction term. A linear model with continuous and categorical explanatory variables still uses the `lm()` function. The key concept here is that the analysis can test whether there are differences in the gradient of the relationship between a response variable and the continuous explanatory variable for multiple levels of the categorical variable. 
 
 For example, if we collect fish from two different locations (e.g. NW and SE), measure their standard lengths and analyse the biochemical composition of their tissue (d13C), we can test whether the gradient and elevation of the lines are significantly different.
 
@@ -243,27 +237,31 @@ gf_point(d13c ~ standard_length, col = ~area, data = anr) %>%
 
 ```
 
-You can see from the figure that the samples taken from the SE location appear greater than the NW and so is the line we have plotted through our data but are the locations significantly different?
+You can see from the figure that the samples taken from the SE location appear greater than the NW and that the 95% confidence intervals do not overlap. So is there a relationship between d13c and standard length and is vary between locations?
 
-We can then undertake the analysis the same as previously using `lm()` function as we have done in the practicals.
+We can undertake the analysis the same as previously using `lm()` function as we have done in the practicals.
 
-```{r, ANCOVA, exercise = TRUE}
+```{r, ANCOVA, exercise = TRUE, warning = FALSE}
 # create the linear model using `lm`
 m1<-lm(d13c ~ standard_length + area, data = anr)
 
 # look to see whether the variables in the model are significant
 Anova(m1)
 
-```
-
-```{r, ANCOVA_residuals, exercise = TRUE}
-# we we still need to check whether the assumptions are met
+# we we still need to check whether the normality assumptions are met
 anr_resid <- residuals(m1)
 gf_qq(~anr_resid) %>%
   gf_qqline()
+
+# look to see whether there homogeneity of variance present for the different levels
+gf_boxplot(anr_resid ~ anr$area) %>%
+  gf_hline(colour = "red", linetype = "dashed", yintercept = 0) %>% 
+  gf_theme(theme_classic())
 ```
 
-In this example, we have assumed that the two lines are parallel (i.e. have equal gradients) and that there is no interaction between `standard_length` and `area`. It is good practice to test for an interaction first. We can look more closely at the results by using `summary()` and find the coefficients for the intercepts and gradients of the lines as well as whether they are significant.
+The assumption of normality is been met when you assess the qq-plot because the residuals sit nicely along the black dotted line. The variability is slightly larger at the SE site than the NW site when you look at the boxplot. However, look at the y-axis and you will see the difference is tiny so we are still happy. The residuals are roughly spread around zero as well (red dotted line). We can see that area and standard length are both significant explanatory variables for d13c.
+
+We can look more closely at the results by using `summary()` and find the coefficients for the intercepts and gradients of the lines as well as whether they are significant.
 
 ```{r, ANCOVA_3-setup, include = FALSE}
 # create the linear model using `lm`
@@ -275,9 +273,9 @@ summary(m1)
 
 ```
 
-The table is a combination of what you have seen already when interpreting the [linear models with continuous variables]() and [linear models with categorical variables]().
+The table is a combination of what you have seen already when interpreting the [linear models with continuous variables](https://naturalandenvironmentalscience.shinyapps.io/NES2505linearmodels1/#section-how-to-interpret-lm-summary) and [linear models with categorical variables](https://naturalandenvironmentalscience.shinyapps.io/NES2505linearmodels2/#section-what-about-the-individual-levels).
 
-The table can be interpreted as follows for those data from the NW area:
+You may be wondering where NW has gone in the table. The intercept is reported by NW is the baseline level which SE gets reported against. The table can be interpreted as follows for those data from the NW area:
 
 * `intercept` = `-20.812942`
 * gradient of the line = `0.003331`
@@ -287,10 +285,9 @@ The interpretation for the SE area is very similar except that the intercept is 
 * `intercept` = `-20.812942` + `0.446764`
 * gradient of the line = `0.003331`
 
-The `intercept` for the SE area is ~0.4 per mil higher than the NW station. You can see this in the figure where the blue SE line is higher than the red NW line.
+The `intercept` for the SE area is ~0.4 per mil higher than the NW station. You can see this in the figure where the blue SE line is higher than the red NW line.  
 
-You will find that for Two-way ANOVA with unbalanced data and for ANCOVA, the most
-accurate F-values are calculated by using the `Anova()` function from the `car` package which uses Type-II Sums of Squares.
+In this example, we have assumed that the two lines are parallel (i.e. have equal gradients) and that there is no interaction between `standard_length` and `area`. It is good practice to test for an interaction first.
 
 ## Fitting curves
 ### Using 2 explanatory variables to fit curves
@@ -329,7 +326,7 @@ focus on the first (Residuals vs Fitted) and second (QQ plot)
 rm(plant_growth)
 rm(plasma)
 ```
-```{r lolium_straight_line, exercise = TRUE, exercise.lines=15}
+```{r lolium_straight_line, exercise = TRUE, exercise.lines=5}
 
 ```
 ```{r lolium_straight_line-solution}
@@ -403,9 +400,6 @@ jumped from 36.7% to 87.6%
 These are for the intercept, water, water$^2$. As
 expected the water$^2$ coefficient is very small and negative (-0.008) but
 nevertheless highly significant (P = 0.000000295, report as P<0.001)
-* The second model `lolium_lm2` is more complex, and we generally want to use 
-the simplest model possible. However you can see all three of its predictors
-are highly significant, and it makes better biological sense too.
 
 You can view the predicted line and see the improvement. Simply add the overall
 structure of your model (in `y ~ x + I(x^2)` syntax to the `gf_lm()` function.
@@ -414,7 +408,8 @@ intervals around our fitted line:
 
 ```{r fitted_line, echo=TRUE, warning=FALSE}
 gf_point(growth ~ water, data = lolium) %>% 
-  gf_lm(formula = y ~ x + I(x^2), interval = "confidence")
+  gf_lm(formula = y ~ x + I(x^2), interval = "confidence")%>%
+  gf_theme(theme_classic())
 ```
 
 ### Polynomial curve fitting: be cautious
@@ -424,27 +419,18 @@ is nothing to stop you fitting `x^3`, or `x^4` terms to fit more and more
 complex curves. However, be very cautious about fitting such general **polynomial**
 models, as the `x^3` or `x^4` terms are unlikely to have any biological meaning.
 
-### Handling regular patterns over time
-Sometimes you might have data that shows a regular rise and fall, e.g. temperature
-data recorded every hour over the course of several weeks. To analyse such data
-you might want to remove the daily cycle, so that you can study other effects.
-Using the sine and cosine of your explanatory variable (hour of day) can be an
-effective trick. Simply create a model of the form:
-
-$$temperature = sine(\frac{2 \pi}{24.hr})  + cosine(\frac{2\pi}{24.hr}) + Error$$
-Similar methods can be used if working with weekly data (divide by 52.week number)
-or monthly data (divide by 12.month number)
-
-If you encounter cyclical data that fluctuates on a daily, weekly, monthly or
-annual basis either in Stage 2 or Stage 3 then contact me and I will help you
-to analyse it.
-
-
 ## Summary
 When you have multiple explanatory variables, key things to remember include:
 
-* checking for interactions. Look at the interaction term first - if it is significant then retain all predictor variables
+* checking for interactions. Look at the interaction term first - if it is significant then retain all explanatory variables
+* interaction terms are biologically interesting and occur when one or more explanatory variables depend on another explanatory variable
+* it is possible to include categorical and continuous explanatory variables in a linear model
 * you can fit curves with multiple predictors, using quadratic or 'polynomial' approach
-* if you have two categorical explanatory variables but unbalanced data, use the `Anova` function from the `car` package. If you have a mixture of categorical and continuous predictors you would need to use the `Anova` function. This is because it uses Type III sums of squares, which are insensitive to the order in which you provide the explanatory variables.
-* If you have one categorical and one continuous explanatory (sometimes called
-"ANCOVA") then always use the `Anova()` function.
+
+### Further reading
+
+There are series of resources which may help with understanding these concepts more:
+
+* The New Statistics with R [Chapter 11 Analysis of Variance](https://academic.oup.com/book/41230/chapter/350713595) and [Chapter 13 Analysis of Covariance](https://academic.oup.com/book/41230/chapter/350713915)
+* Getting started with R [Chapter 6 Advancing Your Statistics in R](https://academic.oup.com/book/27290/chapter/196937066?login=true#414452309) by Beckerman et al.
+* Experimental Design and Data Analysis for Biologist by Quinn and Keough chapters 8 and 12
