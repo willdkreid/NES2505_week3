@@ -38,25 +38,23 @@ peas_dat <- read.csv("Data/peas_block.csv")
 ```
 
 # Introduction
-Now that we have developed a good understanding of linear models we are going to look at some more complex cases. The overall aim is to ensure that you are familiar with the use of linear models and the `lm()` function when you have multiple explanatory variables. These might be all continuous, all categorical, or a mixture of the two. Multiple explanatory variables can also arise in curve-fitting. You will also have the opportunity to gain more confidence and expertise in manipulating and plotting your data. Specific objectives are to:
+Now that we have developed a good understanding of linear models we are going to look at some more complex cases. The overall aim is to ensure that you are familiar with the use of linear models and the `lm()` function when you have multiple explanatory variables. These might be all continuous, all categorical, or a mixture of the two. Multiple explanatory variables can also arise in curve-fitting. You will also have the opportunity to gain more confidence and expertise in manipulating and plotting your data. The specific objectives of this practical are to:
 
-1. Two categorical explanatories, with a significant interaction terms, and how to interpret them
-2. One categorical and one continuous explanatory, with non-significant interaction term.
-3. Fitting curves to your data with `lm()`
-4. Demonstrate how to manage unbalanced designs
-5. Allow you to explore some of these ideas with new datasets (optional)
+1. undertake an analysis with two categorical explanatories, with a significant interaction term, and how to interpret it
+2. undertake an analysis with one categorical and one continuous explanatory, and understand what to with a non-significant interaction term.
+3. Fitting curves to your data with `lm()` (optional)
 
 # Packages and data sets
 
 Within this practical we are going to be using three data sets:
 
-* calcium levels in the blood of rabbits and whether these are influenced by the location and sex of the rabbit.
-* carbon stable isotope values (d13C) in the deep-sea fish _Antimora rostrata_ from the mid-Atlantic Ridge and whether these are influenced by fish length or location
-* whether the growth of the grass _Lolium perenne_ is related to soils of different water content
+* calcium levels in the blood of rabbits and whether these are influenced by the location and sex of the rabbit (`plasma.csv`)
+* carbon stable isotope values (d13C) in the deep-sea fish _Antimora rostrata_ from the mid-Atlantic Ridge and whether these are influenced by fish length or location (`anr_ancova.csv`)
+* whether the growth of the grass _Lolium perenne_ is related to soils of different water content (`grass_growth.csv`)
 
 We will be using the packages `mosaic` and `car`.
 
-First, thing to do is load your packages and read in your data to RStudio.
+First, thing to do is load your packages and read in your data into RStudio. Look back at previous practicals, if you have forgotten how to do this.
 
 # Multiple explanatory variables with interaction terms
 ## What are interaction terms?
@@ -101,7 +99,7 @@ where:
  
 The $\textit{Explanatory 1}$ and $\textit{Explanatory 2}$ variables can be continuous and/or categorical. You can express an interaction term in R using the `lm()` function, by adding an extra term with the two explanatories separated by a colon `:` symbol.
 
-Let's look at the example from the [Interactive Website on interaction terms]()
+Let's look at the example from the [Interactive Website on interaction terms](https://naturalandenvironmentalscience.shinyapps.io/NES2505linearmodel3/) by working through the analysis in the next few sections.
 
 ## Example of interactions: blood plasma calcium in rabbits
 Let's look at the example of the blood Ca level in rabbits, half from a lowland agricultural farm, half from an upland farm, split according to gender. So we have two categorical explanatory variables in this example. Download the file `plasma.csv` from Canvas and import the file into an R table called `plasma_dat`. Now see if you can produce a boxplot similar to the following. **Hints**:
@@ -136,6 +134,8 @@ Before reading on, think about these questions:
 * How would you report the above F and p-values in a report?
 * Which explanatory variables are "statistically significant"?
 
+Write these down and discuss with your peers and check with a demonstrator. Even better make a note in your code using the # so that when you look at the practical again you can remember your answer.
+
 ## How to interpret a linear model with interaction terms
 When you have an interaction term as one of your explanatory variables, always look at it **first**. If it is not significant, you might be able to manage with a simpler linear model that does not include interaction terms. It is always best to try and have a simpler rather than overly complex linear model when possible.
 
@@ -160,13 +160,13 @@ It is fairly obvious that **if we ignore sex** the overall amounts of blood calc
 
 How does the mean value compare to the median? See if you can calculate the mean for lowland and upland?
 
-Second, the `sex` main effect, **if we ignore site**. Produce a graph similar to the following:
+Let's now look at the `sex` main effect, **if we ignore site**. Produce a graph similar to the following:
 
 ```{r, echo=FALSE}
 gf_boxplot(calcium ~ sex, data=plasma_dat)
 ```
 
-Now the sets of values are very different, with the males much lower overall than the females, which explains the large F-ratio and highly significant (p<0.001) results for `sex` main effect.
+Now female and male values are very different, with the males much lower overall than the females, which explains the large F-ratio and highly significant (p<0.001) results for `sex` main effect.
 
 Finally, the interaction term. As this graph is a little trickier to draw, I have included the R code. We include both the raw data, and lines connecting the means, to show the direction of change:
 
@@ -174,7 +174,8 @@ Finally, the interaction term. As this graph is a little trickier to draw, I hav
 # gf_point() adds the raw data points
 # gf_line() adds lines. We use stat="summary" to indicate the mean
 gf_point(calcium ~ site, colour= ~sex, data=plasma_dat) %>%
-  gf_line(calcium ~ site, colour= ~sex, group= ~sex, stat="summary", data=plasma_dat)
+  gf_line(calcium ~ site, colour= ~sex, group= ~sex, stat="summary", data=plasma_dat)%>%
+  gf_theme(theme_classic())
 ```
 
 The important point to note here is that **the lines are not parallel**. If the lines were parallel, either upwards or downwards, it would indicate that the blood calcium changed in a similar way for both genders when moving from lowland to upland farms. However in reality they are not parallel, indeed the differences are so big that the gradients of the lines go in opposite directions. This indicates that the physiology of male and female rabbits in response to the elevation change is not the same. When you look at plots like this:
@@ -182,9 +183,9 @@ The important point to note here is that **the lines are not parallel**. If the 
 * lines not parallel (as here): interaction is probably significant
 * lines parallel (not in this example): interaction probably non-significant
 
-To explore these data more [look at this interactive webpage](). This uses the same data, but you can randomly adjust some of the terms, and see how the results change. Begin by setting the interaction term to zero, and notice the difference.
+To explore how interaction work more [look at this interactive webpage](https://naturalandenvironmentalscience.shinyapps.io/NES2505linearmodel3/#section-interactive-demonstration). It uses the same data, but you can randomly adjust some of the terms, and see how the results change. Begin by setting the interaction term to zero, and notice the difference.
 
-We still need to check whether the assumptions of the test have been met (normality and homogeneity of variance). These can be done as we did with the linear models with continuous or categorical variables using a qq-plot and boxplot like last week. We will just look at the qq-plot to save time today but you would want to check for homogeneity of variance here as well.
+We still need to check whether the assumptions of the test have been met (normality and homogeneity of variance). These can be done as we did with the linear models with continuous or categorical variables using a qq-plot and boxplots like last week. We will just look at the qq-plot to save time today but you would want to check for homogeneity of variance if you did this as part of study you had undertaken.
 
 ```{r warning=FALSE, message=FALSE}
 # check the qqplot
@@ -196,14 +197,16 @@ gf_qq(~calcium_lm_resid) %>%
 What do you think about the qq-plot? Do you think that the assumption of normality has been met?
 
 # Multiple explanatories - second example
-In our second example we have one continuous explanatory, and one categorical explanatory. You will often see this type of analysis described as an ANCOVA or Analysis of Covariance. Here we look at the biochemical tissue composition (`d13C`) of fish. The categorical explanatory is the site (NW or SE) stored in `area`, and the continuous explanatory is fish length, stored in the column `standard_length`. The data are on Canvas in the file `anr_ancova.csv`. Download them into the appropriate folder, and import them into R into a `data.frame` called `anr` and run `summary(anr)` and `View(anr)` to check that it has been imported correctly.
+In our second example we have one continuous explanatory, and one categorical explanatory. You will often see this type of analysis described as an ANCOVA or Analysis of Covariance. Here we look at the biochemical tissue composition (`d13C`) of fish. The categorical explanatory is the site (NW or SE) stored in `area`, and the continuous explanatory is fish length, stored in the column `standard_length`. The data are on Canvas in the file `anr_ancova.csv`. Download them into the appropriate folder, and import them into R into as a `data.frame` called `anr` and run `summary(anr)` and `View(anr)` to check that it has been imported correctly.
+
+The aim of this analysis is to understand the relationship between d13c and size and whether this differs between areas. Can you write down a series of null hypothesis and alternate hypothesis for this overall research aim.
 
 ```{r echo=FALSE}
 anr <- read.csv("Data/anr_ancova.csv")
 ```
 
 ## Plot your data
-Begin by plotting your fish data using a scatterplot, with the area on the x-axis and biochemical composition on the y-axis. As you have two areas, you want to colour your points according to the SE or NW locations, as well as add fitted lines to visualise the relationship. Edit the lines of code below to getting them working and to produce a similat figure to the one shown.
+Begin by plotting your fish data using a scatterplot, with the area on the x-axis and biochemical composition on the y-axis. As you have two areas, you want to colour your points according to the SE or NW locations, as well as adding two fitted lines to visualise the relationship. Edit the lines of code below to getting them working and to produce a similar figure to the one shown.
 
 ```{r plot-anr, echo = FALSE, warning=FALSE}
 # plot data first
@@ -215,14 +218,16 @@ gf_point(d13c ~ standard_length, colour = ~area, data = anr) %>%
 
 `# plot data first
 gf_point(d13c ~ stadnard_length, col = ~area, data = anr) %>%
-gf_lm(d13c ~ standard_length, col = area, data = anr) %>%
+
+gf_lm(d13 ~ standard_length, col = area, data = anr) %>%
+
 gf_labs(x = "length", y = "d13c per mil")
 `
 
 If you are unsure, look back at last weeks practical because some of the code is the same and check for spelling errors (`names(anr)` will give you the variables in the data frame).
 
 ## Undertake analysis
-It is obvious that d13c increases with larger fish, and that concentrations appear to be higher in the SE than NW site. Are the lines parallel? Let's check with a linear model. Think about how you set-up your previous linear model with two categorical explanatory variables and an interaction term and see if you can write the new model from scratch. The two explanatory variables are `standard_length` and `area` while the response variable is `d13c`.  
+It is obvious that d13c increases with larger fish, and that concentrations appear to be higher in the SE than NW site. Are the lines parallel? Let's check with a linear model. Think about how you set-up your previous linear model with two categorical explanatory variables and an interaction term and see if you can edit that code to produce the new model. The two explanatory variables are `standard_length` and `area` while the response variable is `d13c`.  
 
 ```{r, warning=FALSE, echo = FALSE, message=FALSE}
 anr_lm <- lm(d13c ~ standard_length + area + standard_length:area, data = anr)
@@ -236,15 +241,24 @@ anr_lm2 <- lm(d13c ~ standard_length + area, data = anr)
 Anova(anr_lm2)
 ```
 
-This second model is the one to use. The ANOVA table gives us the F-value and p-value which we need to report but it would be useful to know the slope and the intercept for the relationship for the two fitted lines. It would be good to report the equations for each line. We can do this by using the `summary` function like last week.
+This second model is the one to use. The ANOVA table gives us the F-value and p-value which you need to report but it would be useful to know the slope and the intercept for the relationship for the two fitted lines. It would be good to report the equations for each line. We can do this by using the `summary` function like last week.
 
 ```{r}
 summary(anr_lm2)
 ```
 
-Looking at the summary output and the scatterplot you have produced which plotted the relationships between d13c and standard length for both areas, can you work what the intercepts are for each area and what the gradient of the slope is? 
+Looking at the summary output and the scatterplot you have produced which plotted the relationships between d13c and standard length for both areas, can you work what the intercepts are for each area and what the gradient of the slope is? Write these down as a formula in the following format: `d13c = standard lenght*slope + intercept`.
 
-# Using linear models to fit curves
+# Take home messages from today's practical
+These are the key things you should have learnt:
+
+1. How to measure whether two (or more) explanatory variables are independent in their effects via interaction terms.
+2. You can use categorical and continuous explanatory variables in a linear model.
+3. How to fit curves using a quadratic model (if you complete the optional exercise below).
+
+If you have any questions about these topics, remember to speak to demonstrator or pop them into Microsoft Teams.
+
+# Using linear models to fit curves (OPTIONAL exercise)
 How can a linear model fit a curve? The term "linear model" simply refers to the way in which the different explanatory variables are combined. They are all combined using simple addition symbols `+`, for example, your model:
 
 `anr_lm <- lm(d13c ~ standard_length + area + standard_length:area, data = anr)`
@@ -276,7 +290,7 @@ These are easy to create using the `lm()` function using:
 The slightly confusing change to the usual syntax is that `^2` is used to indicate that we are going to add a squared explanatory, and we have to "wrap" the squared term in an extra set of brackets prefaced by `I()` to indicate that we "Intend" to do this, and it isn't a typing error.
 
 ## _Lolium_ growth example
-Let us build on the example at the [Interactive Website on Curve fitting]() for growth of the grass _Lolium perenne_ in soils of different water content. You will need to first:
+Let us build on the example at the [Interactive Website on Curve fitting](https://naturalandenvironmentalscience.shinyapps.io/NES2505linearmodel3/#section-fitting-curves) for growth of the grass _Lolium perenne_ in soils of different water content. You will need to first:
 
 * dowload the file `grass_growth.csv` from Canvas
 * copy `grass_growth.csv` into your `Data` folder
@@ -344,18 +358,6 @@ summary(lolium_lm2)
 
 This linear model is also significant. You will notice that the overall model is highly significant with $F_{2,16}=64.37,p<0.001$ and $R^2=0.876$, or 87.6% explained. **Note** In the previous sentence the p-value is written as $p<0.001$ which indicates "p is less than 0.001". This is because in the overall linear model output it the p-value is shown as `p-value: 2.23e-08` which is the same as $p=0.0000000223$. The convention is that for tiny p-values, the actual amount is not shown, and instead the "less than 0.001" syntax is used.
 
-Is the improvement in the overall model of `lolium_lm2` compared to the earlier `lolium_lm1` significant? We can compare the two models using `anova()`:
-
-```{r, eval=FALSE, echo=TRUE}
-anova(lolium_lm1, lolium_lm2)
-```
-```{r, eval=TRUE, echo=FALSE}
-print(anova(lolium_lm1, lolium_lm2))
-```
-
-
-This is a test to compare our two linear models, and it gives $F_{2,16}=70.48, p<0.001$ indicating that there is a big difference in the performance of our two models, with our second one, labelled `Model 2` in the above output, better. Notice also the column headed `RSS` which stands for "Residual Sum of Squares". This is a measure of the "noise" that is not explained by our model. You can see that it is much smaller at 146.81 for the second model.
-
 ### Coefficients from quadratic model `lolium_lm2`
 Look at the column headed `Estimate` in the `summary(lolium_lm2)` above. All three estimates, the `(Intercept)`, the `water` and quadratic `I(water^2)` terms are significant, but their values are very different, at 10.716, 1.067 and -0.009 respectively. It is common for the absolute value of the squared term to be very small. **Questions**:
 
@@ -381,11 +383,4 @@ gf_point(growth ~ water, data = lolium_dat) %>%
 
 This looks much better and more realistic. It is a better statistical model, and also makes more biological sense. Before you go further, try modifying this plot so that the horizontal axis is labelled "Soil water %" and the vertical axis "Growth rate".
 
-# Take home messages from today's practical
-These are the key things you should have learnt:
 
-1. How to measure whether two (or more) explanatory variables are independent in their effects via interaction terms
-2. How to fit curves using a quadratic model
-3. You can use categorical and continuous explanatory variables in a linear model.
-
-If you have any questions about these topics, remember to speak to demonstrator or pop them into Microsoft Teams.

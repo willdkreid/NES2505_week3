@@ -1,0 +1,13 @@
+name: NES2505exptdesign
+title: NES2505exptdesign
+username: naturalandenvironmentalscience
+account: naturalandenvironmentalscience
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10113529
+bundleId: 7772559
+url: https://naturalandenvironmentalscience.shinyapps.io/NES2505exptdesign/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: multiple_explan.html|multiple_explan.Rmd|practical3_good.R|Practical3_schedule.html|Practical3_schedule.Rmd|README.md|SS-ANOVA.html|SS-ANOVA.Rmd|SS-ANOVA_files/figure-html/crop_yield_info-1.png|SS-ANOVA_files/figure-html/lm_with_means_xy-1.png|multiple_explan_files

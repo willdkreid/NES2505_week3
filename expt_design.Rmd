@@ -41,14 +41,11 @@ The simplest type of experimental design includes some sort of randomisation, an
 can be used in both laboratory- and field-experiments. Randomisation is useful for
 both 'designed' and 'natural' experiments. The need for multiple replicates may
 seem fairly obvious to you, but think about one of the world's oldest agricultural
-experiments, the Palace Leas Experiment at Cockle Park, which many of you will have
-visited:
+experiments, the Palace Leas Experiment at Cockle Park.
 
 ![](www/palace_leas_photo.png)
 
-Thos of you who have visited the site will know that it slopes gently down a
-hill away from the farm lane, down towards a stream, with a series of 14 
-roughly rectangular shaped plots receiving different treatments:
+The siteslopes gently down a hill away from the farm lane, down towards a stream, with a series of 14 roughly rectangular shaped plots receiving different treatments:
 
 ![](www/palace_leas_plot_layout.png)
 
@@ -61,16 +58,15 @@ for sampling, but there remain some problems, and advanced statistical methods
 are sometimes needed.
 
 
-
 ```{r palace_leas, echo=FALSE}
 question("What do you think are some of the challenges that arise from the original
          design? (select ALL that apply)",
   answer("There may be an effect from being near the road", correct = TRUE),
   answer("There is no replication"),
   answer("Plots near the stream may be wetter", correct = TRUE),
-  answer("There is the risk of manure or slurry run-off from the road", correct = TRUE),
   answer("Multiple samples cannot be taken within a plot"),
-  answer("Samples within a plot might not be independent", correct =TRUE)
+  answer("Samples within a plot might not be independent", correct =TRUE),
+  allow_retry = TRUE
 )
 ```
 
@@ -181,7 +177,9 @@ treatment 'level' is applied.
 The overall importance of your explanatory variable is determined by the amount
 of variation it explains relative to the amount of unknown $Error$ variation. Recall
 that the F-value in an ANOVA table is based on the ratio of mean squares (variances)
-in your explanatory variable : error. **Key points** arising from this are:
+in your explanatory variable : error. 
+
+**Key points** arising from this are:
 
 * If the $Error$ is large it is going to be harder to detect an effect from your
 explanatory variable
@@ -208,13 +206,14 @@ Here is a simple experiment to investigate the effects of nitrogen (N) and
 phosphorous (P) on plant biomass. There are four blocks, and also an untreated
 control. The following exercise contains the results in a data.frame called
 `plant_growth`, read in as a 4 row (blocks) by 4 column (block, control, N, P).
-Create two boxplots, one showing the differences in biomass according to treatment.
+Create a boxplot showing the differences in biomass according to treatment and summarise these data.
 
 **Hints**:
 
 * re-arrange the data so that they are in a 3 column table called `plant_growth_lng`
 using the `pivot_longer()` function.
 * Use the `gf_boxplot()` function to create the plot.
+* use the `summary()` function.
 
 ```{r biomass_boxplot-setup}
 # Avoid confusing with other data.frames
@@ -233,10 +232,10 @@ plant_growth_lng <- pivot_longer(plant_growth,
                                  values_to = "biomass")
 
 gf_boxplot(biomass ~ fertiliser, data=plant_growth_lng)
+
+summary(plant_growth_lng)
 ```
 
-Before we go any further, do a quick `summary` of the data in your `plant_growth_lng`
-dataset.
 
 ```{r coding_of_blocks, echo=FALSE}
 question("What additional change is needed before you can analyse the data with
@@ -261,7 +260,7 @@ question("What additional change is needed before you can analyse the data with
 In the following exercise do the following with the `plant_growth_lng` dataset:
 
 * recode the `block` variable to be categorical. **Hint**: use `as.factor()` function;
-Use the `summary()` function before and after re-coding to check the differnce
+Use the `summary()` function to check the difference
 * create a linear model `plant_growth_lm1` with only fertiliser as the explanatory
 variable
 * create a linear model `plant_growth_lm2` with both fertiliser and block as
@@ -305,14 +304,14 @@ Study the two ANOVA tables.
 ```{r compare_anova_tables, echo=FALSE}
 question("Which of the following statements about the ANOVA tables are true? (select ALL that apply)",
   answer("The variance for fertiliser is the same in both tables", correct = TRUE),
-  answer("There is no replication"),
   answer("The residual sums of squares in the first ANOVA = the residual SS + 
          block SS in the second ANOVA", correct = TRUE),
   answer("The total degrees of freedom in both tables is the same", correct = TRUE),
   answer("There is a significant change in the biomass depending on the position
          in the field where the experiment is undertaken", correct = TRUE),
   answer("The F-value is higher for the fertiliser treatment when blocks are used
-         because the residual variance is smaller", correct =TRUE)
+         because the residual variance is smaller", correct =TRUE),
+  allow_retry = TRUE
 )
 ```
 
@@ -320,13 +319,10 @@ question("Which of the following statements about the ANOVA tables are true? (se
 There are lots of other ways in which you can use blocks to improve your experiment
 Examples might include:
 
-* If an experimental unit is an individual plant or animal, group (block) your units 
-according to their initial weight
 * Birds might be blocked according to initial size, or initial egg batch, or
 laying date
-* Nesting sites might be blocked according to distance from urban areas
-* Glasshouse plants might be blocked according to light intensity in different
-parts of the glasshouse
+* Nesting sites might be blocked according to distance from urban areas or the edge of an island
+* Growing marcoalgae in an aquarium might be blocked according to light intensity if this varies or position of water inflow.
 
 Some of these 'blocking' variables are on continuous scales, such as distance
 or light intensity. You can sub-divide a continuous scale into discrete categories
@@ -338,7 +334,6 @@ multiple unwanted variables. These are referred to as _Latin square_ designs
 for 2 variables, or _Latin hypercubes_ when there are lots of variables. Given
 the Star Trek/Star Wars name of the latter, you'll be glad we won't go into them
 in this module.
-
 
 ## Summary
 Think about ways in which you can use block designs to improve your experiments,
